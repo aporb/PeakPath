@@ -167,8 +167,8 @@ GET /api/health
 ## 🧪 Testing with Sample Data
 
 Sample CliftonStrengths PDFs are available in `/resources/`:
-- `Porbanderwala-Amyn-SF_TOP_5.pdf` - Top 5 strengths format
-- `Porbanderwala-Amyn-ALL_34.pdf` - Full 34 strengths format
+- `sample-top5-report.pdf` - Top 5 strengths format
+- `sample-full34-report.pdf` - Full 34 strengths format
 
 ## 📱 Mobile Experience
 

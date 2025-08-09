@@ -45,7 +45,7 @@ The main output interface containing all extracted data:
 
 ```typescript
 interface UserProfile {
-  name: string;                    // "Amyn Porbanderwala"
+  name: string;                    // "John Doe"
   assessmentDate: Date;            // Date when assessment was taken
   format: StrengthFormat;          // "top5", "top10", or "full34"
   strengths: Strength[];           // All strengths in ranking order
@@ -253,8 +253,8 @@ import { STRENGTH_DOMAIN_MAP, ALL_STRENGTHS_INFO } from './services';
 
 The service has been tested with real CliftonStrengths PDFs:
 
-- ✅ **Porbanderwala-Amyn-SF_TOP_5.pdf**: Top 5 format
-- ✅ **Porbanderwala-Amyn-ALL_34.pdf**: Full 34 format
+- ✅ **sample-top5-report.pdf**: Top 5 format
+- ✅ **sample-full34-report.pdf**: Full 34 format
 
 Test results show 100% accuracy in:
 - Name extraction
