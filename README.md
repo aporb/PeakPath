@@ -22,10 +22,8 @@ A modern, microservices-based web application that transforms CliftonStrengths a
 
 ```
 peakpath/
-├── frontend/          # Next.js 15 + TypeScript + Tailwind CSS
-├── backend/           # Node.js + Express + TypeScript
-├── shared/           # Shared types and utilities
-└── docs/            # Documentation
+├── frontend/          # Next.js 15 + TypeScript + Tailwind CSS (Full Stack)
+└── docs/              # Documentation
 ```
 
 ### Frontend Stack
@@ -34,8 +32,8 @@ peakpath/
 - **Tailwind CSS** - Utility-first styling
 - **Responsive Design** - Mobile-first approach
 
-### Backend Stack
-- **Node.js + Express** - RESTful API server
+### Backend Stack (Serverless)
+- **Next.js API Routes** - Serverless functions on Vercel
 - **TypeScript** - Type-safe server development
 - **Claude API** - AI coaching integration
 - **PDF Processing** - Automated assessment parsing
@@ -56,26 +54,23 @@ npm install
 
 ### 2. Configure Environment
 ```bash
-# Backend configuration
-cd backend
-cp .env.example .env
-# Add your Claude API key to .env:
+# Frontend configuration
+cd frontend
+cp .env.example .env.local
+# Add your Claude API key to .env.local:
 # CLAUDE_API_KEY=your_api_key_here
 ```
 
-### 3. Start Development Servers
+### 3. Start Development Server
 ```bash
-# From root directory - starts both frontend and backend
-npm run dev
-
-# Or individually:
-npm run dev:frontend  # http://localhost:8000
-npm run dev:backend   # http://localhost:8001
+# From frontend directory
+cd frontend
+npm run dev  # http://localhost:3000
 ```
 
 ### 4. Test the Application
-1. Navigate to `http://localhost:8000`
-2. Upload a CliftonStrengths PDF (sample PDFs available in `/resources/`)
+1. Navigate to `http://localhost:3000`
+2. Upload a CliftonStrengths PDF 
 3. Explore the interactive dashboard
 4. Start coaching conversations
 
@@ -98,16 +93,24 @@ src/
     └── strength.ts        # TypeScript interfaces
 ```
 
-### Backend (`/backend`)
+### API Routes (`/frontend/src/app/api`)
 ```
-src/
-├── server.ts                    # Express server
-├── types/
-│   ├── clifton-strengths.ts     # Strength data types
-│   └── coaching.ts              # Coaching interfaces
-└── services/
-    ├── claudeCoachingService.ts # Claude AI integration
-    └── cliftonStrengthsPDFParser.ts # PDF parsing
+api/
+├── health/
+│   └── route.ts                 # Health check endpoint
+├── upload/
+│   └── route.ts                 # PDF upload and parsing
+├── coach/
+│   ├── route.ts                 # AI coaching endpoint
+│   └── stream/
+│       └── route.ts             # Streaming coaching responses
+└── lib/
+    ├── services/
+    │   ├── claudeCoachingService.ts   # Claude AI integration
+    │   └── cliftonStrengthsPDFParser.ts # PDF parsing
+    └── types/
+        ├── clifton-strengths.ts       # Strength data types
+        └── coaching.ts                # Coaching interfaces
 ```
 
 ## 🎮 API Endpoints

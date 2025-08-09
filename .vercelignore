@@ -1,5 +1,4 @@
-backend/
-shared/
+# No backend needed - everything in frontend now
 node_modules/
 *.log
 .env*
@@ -8,3 +7,5 @@ uploads/
 data/
 dist/
 start.sh
+.git/
+.vscode/
