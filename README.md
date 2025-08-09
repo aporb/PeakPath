@@ -1,6 +1,6 @@
 # PeakPath - AI-Powered CliftonStrengths Coaching Platform
 
-A modern, microservices-based web application that transforms CliftonStrengths assessments into interactive, AI-powered personal coaching experiences.
+A modern, microservices-based web application that transforms CliftonStrengths assessments into interactive, AI-powered personal coaching experiences. Still in Alpha. 
 
 ## ✨ Features
 
