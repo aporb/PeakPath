@@ -43,10 +43,17 @@ export async function POST(request: NextRequest) {
     const profile = parseResult.data!;
 
     // Transform backend format to frontend format
+    const domainMapping: Record<string, string> = {
+      'Executing': 'executing',
+      'Influencing': 'influencing', 
+      'Relationship Building': 'relationship-building',
+      'Strategic Thinking': 'strategic-thinking'
+    };
+
     const strengthsWithIds = profile.strengths.map((strength) => ({
       id: `${profile.name.replace(/\s+/g, '_').toLowerCase()}_${strength.name.toLowerCase()}`,
       name: strength.name,
-      domain: strength.domain.toLowerCase().replace(/\s+/g, '-'), // Convert to frontend format
+      domain: domainMapping[strength.domain] || strength.domain.toLowerCase().replace(/\s+/g, '-'),
       rank: strength.rank,
       description: strength.description || '',
       isTopFive: strength.rank <= 5
@@ -61,6 +68,11 @@ export async function POST(request: NextRequest) {
     };
 
     console.log(`Successfully parsed ${profile.strengths.length} strengths for ${profile.name}`);
+    console.log('Sample strengths:', frontendProfile.strengths.slice(0, 3).map(s => ({
+      name: s.name, 
+      domain: s.domain, 
+      rank: s.rank
+    })));
 
     return NextResponse.json(frontendProfile);
 
