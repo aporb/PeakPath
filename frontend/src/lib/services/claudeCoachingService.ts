@@ -187,6 +187,15 @@ Remember: You are having a conversation, not giving a lecture. Keep responses co
         ? profile.assessmentDate.toISOString().split('T')[0]
         : new Date(profile.assessmentDate).toISOString().split('T')[0];
       
+      // Clean and deduplicate top 5 strengths
+      const uniqueTopFive = profile.topFive ? 
+        profile.topFive.reduce((acc: any[], current) => {
+          if (!acc.find(s => s.name === current.name)) {
+            acc.push(current);
+          }
+          return acc;
+        }, []).slice(0, 5) : [];
+      
       prompt += `User's CliftonStrengths Profile:
 Name: ${profile.name}
 Assessment Date: ${assessmentDate}
@@ -194,10 +203,10 @@ Format: ${profile.format}
 Leading Domain: ${profile.leadingDomain}
 
 Top 5 Strengths:
-${profile.topFive.map((s, i) => `${i + 1}. ${s.name} (${s.domain})`).join('\n')}
+${uniqueTopFive.map((s, i) => `${i + 1}. ${s.name} (${s.domain})`).join('\n')}
 
 Domain Distribution:
-${profile.domainSummary.map(d => `${d.domain}: ${d.count} strengths`).join('\n')}
+${profile.domainSummary?.map(d => `${d.domain}: ${d.count} strengths`).join('\n') || 'Distribution not available'}
 
 `;
     }

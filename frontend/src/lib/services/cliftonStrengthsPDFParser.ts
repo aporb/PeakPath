@@ -226,7 +226,26 @@ export class CliftonStrengthsPDFParser {
       });
     }
 
-    return strengths.sort((a, b) => a.rank - b.rank);
+    // Remove duplicates by name and ensure proper ranking
+    const uniqueStrengths = strengths.reduce((acc: Strength[], current) => {
+      const existing = acc.find(s => s.name === current.name);
+      if (!existing) {
+        acc.push(current);
+      }
+      return acc;
+    }, []);
+
+    // Re-rank to ensure no gaps and proper ordering
+    const sortedStrengths = uniqueStrengths.sort((a, b) => a.rank - b.rank);
+    sortedStrengths.forEach((strength, index) => {
+      strength.rank = index + 1;
+    });
+
+    console.log(`Parsed ${sortedStrengths.length} unique strengths:`, 
+      sortedStrengths.slice(0, 5).map(s => `${s.rank}. ${s.name}`)
+    );
+
+    return sortedStrengths;
   }
 
   /**

@@ -68,11 +68,31 @@ export async function POST(request: NextRequest) {
     };
 
     console.log(`Successfully parsed ${profile.strengths.length} strengths for ${profile.name}`);
-    console.log('Sample strengths:', frontendProfile.strengths.slice(0, 3).map(s => ({
+    
+    // Debug logging to track duplicate issues
+    console.log('Raw backend strengths:', profile.strengths.slice(0, 5).map(s => ({
       name: s.name, 
       domain: s.domain, 
       rank: s.rank
     })));
+    
+    console.log('Transformed frontend strengths:', frontendProfile.strengths.slice(0, 5).map(s => ({
+      name: s.name, 
+      domain: s.domain, 
+      rank: s.rank,
+      id: s.id
+    })));
+    
+    // Check for duplicates
+    const strengthNames = frontendProfile.strengths.map(s => s.name);
+    const uniqueNames = [...new Set(strengthNames)];
+    if (strengthNames.length !== uniqueNames.length) {
+      console.error('DUPLICATE STRENGTHS DETECTED:', {
+        total: strengthNames.length,
+        unique: uniqueNames.length,
+        duplicates: strengthNames.filter((name, index) => strengthNames.indexOf(name) !== index)
+      });
+    }
 
     return NextResponse.json(frontendProfile);
 
