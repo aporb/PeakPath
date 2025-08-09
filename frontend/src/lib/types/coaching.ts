@@ -30,6 +30,9 @@ export interface CoachingRequest {
   
   /** Optional focus area for coaching */
   focusArea?: string;
+  
+  /** Full PDF content for comprehensive analysis with 200K context */
+  fullPDFContent?: string;
 }
 
 export interface CoachingResponse {

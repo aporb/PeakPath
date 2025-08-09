@@ -23,6 +23,7 @@ export interface StrengthProfile {
   strengths: Strength[];
   assessmentDate: Date;
   reportUrl?: string;
+  fullPDFContent?: string; // Full PDF text for comprehensive AI analysis
 }
 
 // Chat message structure

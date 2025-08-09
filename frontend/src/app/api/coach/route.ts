@@ -13,7 +13,8 @@ export async function POST(request: NextRequest) {
       strengthsProfile,
       focusArea,
       profileId,
-      strengthContext
+      strengthContext,
+      fullPDFContent
     }: CoachingRequest & { profileId?: string; strengthContext?: string } = await request.json();
 
     if (!message) {
@@ -37,24 +38,25 @@ export async function POST(request: NextRequest) {
     console.log('Coaching request:', { message, type, sessionId, hasProfile: !!strengthsProfile });
 
     try {
-      // Create Claude coaching service
+      // Create Claude coaching service with Sonnet 4 and enhanced context
       const claudeCoachingService = createClaudeCoachingService(process.env.CLAUDE_API_KEY, {
-        model: process.env.CLAUDE_MODEL || 'claude-3-5-sonnet-20241022',
-        maxTokens: parseInt(process.env.CLAUDE_MAX_TOKENS || '4096'),
+        model: process.env.CLAUDE_MODEL || 'claude-sonnet-4-20250514',
+        maxTokens: parseInt(process.env.CLAUDE_MAX_TOKENS || '8000'), // Increased for 200K context window
         temperature: parseFloat(process.env.CLAUDE_TEMPERATURE || '0.7')
       });
 
       // Generate session ID if not provided
       const currentSessionId = sessionId || `session_${Date.now()}_${Math.random().toString(36).substr(2, 11)}`;
 
-      // Create coaching request
+      // Create coaching request with full PDF content for comprehensive analysis
       const coachingRequest: CoachingRequest = {
         type,
         message,
         strengthsProfile,
         sessionId: currentSessionId,
         context,
-        focusArea
+        focusArea,
+        fullPDFContent // Include full PDF text for deeper insights
       };
 
       // Generate coaching response using Claude

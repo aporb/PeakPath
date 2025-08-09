@@ -107,7 +107,8 @@ export class CliftonStrengthsPDFParser {
       return {
         success: true,
         data: profile,
-        warnings: this.generateWarnings(text, strengths)
+        warnings: this.generateWarnings(text, strengths),
+        fullTextContent: text // Include full text for comprehensive AI analysis
       };
 
     } catch (error) {

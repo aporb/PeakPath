@@ -64,7 +64,8 @@ export async function POST(request: NextRequest) {
       userId: `user_${profile.name.replace(/\s+/g, '_').toLowerCase()}`,
       strengths: strengthsWithIds,
       assessmentDate: profile.assessmentDate,
-      reportUrl: `temp_${Date.now()}`
+      reportUrl: `temp_${Date.now()}`,
+      fullPDFContent: parseResult.fullTextContent // Include for comprehensive AI analysis
     };
 
     console.log(`Successfully parsed ${profile.strengths.length} strengths for ${profile.name}`);

@@ -58,6 +58,7 @@ export default function PeakPathApp() {
       strengthContext,
       profileId: strengthProfile?.id,
       conversationHistory: chatMessages.slice(-10), // Send last 10 messages for context
+      fullPDFContent: strengthProfile?.fullPDFContent, // Include full PDF text for comprehensive analysis
       strengthsProfile: strengthProfile ? {
         name: strengthProfile.userId, // Using userId as name since that's what we have
         assessmentDate: strengthProfile.assessmentDate,

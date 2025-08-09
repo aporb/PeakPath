@@ -70,6 +70,7 @@ export interface ParsedPDFResult {
   data?: UserProfile;
   error?: string;
   warnings?: string[];
+  fullTextContent?: string; // Store full PDF text for comprehensive AI analysis
 }
 
 export interface PDFProcessingError extends Error {
