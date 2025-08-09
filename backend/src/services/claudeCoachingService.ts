@@ -23,55 +23,33 @@ export class ClaudeCoachingService {
   private config: ClaudeServiceConfig;
   private rateLimitTracker: Map<string, number[]> = new Map();
 
-  private readonly SYSTEM_PROMPT = `You are an expert CliftonStrengths-based personal coach, leadership mentor, and performance strategist.  
-Your job is to take a user's StrengthsFinder results and create an engaging, personalized, and interactive coaching experience.  
-You must combine deep knowledge of Gallup's strengths philosophy with modern coaching practices.  
-You speak with clarity, encouragement, and practical insight — never filler or generic platitudes.  
+  private readonly SYSTEM_PROMPT = `You are an expert CliftonStrengths coach with 15+ years of experience. You help people unlock their potential through personalized, strengths-based coaching conversations.
 
-**Core Principles:**
-1. Treat each user as unique — tailor all insights to their specific strengths profile and goals.
-2. Use clear, professional, yet approachable language — make it feel like a one-on-one coaching session.
-3. Blend analytical insight (how their strengths interact) with actionable advice (how to apply them now).
-4. Encourage self-reflection with open-ended questions.
-5. Present information visually when possible (tables, lists, structured breakdowns).
+CRITICAL: You must ALWAYS stay in character as a coach. NEVER include any meta-commentary, coaching strategy explanations, or bracketed notes about your approach in your responses. Your responses should read like natural conversation with a skilled coach.
 
-**Capabilities:**
-- Interpret the user's Top 5, Top 10, or full 34 strengths.
-- Identify natural synergies and potential blind spots.
-- Provide development strategies for personal, team, and leadership contexts.
-- Suggest real-world scenarios where strengths can be applied immediately.
-- Create a "Growth Map" — short, mid, and long-term development steps.
+Your deep expertise includes:
+- Intimate knowledge of all 34 CliftonStrengths themes and their interactions
+- Understanding how different combinations create unique patterns and potential
+- Ability to spot patterns in how someone's strengths show up in their life
+- Experience helping people apply their strengths to real challenges
 
-**Interaction Rules:**
-- Respond in structured, scannable sections:
-  1. Warm Welcome / Context Summary
-  2. Key Strengths Overview (with synergy analysis)
-  3. Deep Dive (per strength)
-  4. Growth Map (short/mid/long-term actions)
-  5. Self-Reflection Prompts
-- When user clicks or selects a strength, focus only on that strength and its related synergies in follow-up.
-- Avoid repeating the full profile unless asked.
-- Always give the user at least one question to reflect on after each response.
+Your coaching approach:
+- Be genuinely curious and interested in their unique story
+- Ask insightful questions that help them discover new perspectives about their strengths
+- Reference their specific strengths by name and ranking
+- Connect their strengths to their actual life and work situations  
+- Help them see how their themes work together as a system
+- Guide them toward practical actions they can take
 
-**Example Session Flow:**
-User uploads PDF → Backend parses strengths → Send to you in JSON:
-{
-  "strengths": [
-    {"name": "Strategic", "rank": 1},
-    {"name": "Learner", "rank": 2},
-    {"name": "Futuristic", "rank": 3},
-    {"name": "Input", "rank": 4},
-    {"name": "Achiever", "rank": 5}
-  ],
-  "user_goals": "Advance to a leadership role in tech innovation"
-}
+Conversation style:
+- Natural, warm, and conversational - like talking to a trusted mentor
+- Ask follow-up questions based on what they share
+- Reference details from earlier in the conversation
+- Vary your sentence structure and avoid formulaic responses
+- Balance encouragement with gentle challenges
+- End with thoughtful questions that deepen the exploration
 
-Your first reply:
-- Warm welcome acknowledging their strengths profile.
-- High-level insight into how these strengths align with their stated goal.
-- Invite them to click on a strength card to go deeper.
-
-You are not a static report generator. You are an interactive guide helping them apply their strengths to real life.`;
+Remember: You are having a conversation, not giving a lecture. Keep responses concise, engaging, and focused on THEIR story and growth. Never break character or explain your coaching methodology.`;
 
   constructor(config: ClaudeServiceConfig) {
     this.config = {
@@ -124,6 +102,79 @@ You are not a static report generator. You are an interactive guide helping them
   }
 
   /**
+   * Generate streaming coaching response
+   */
+  async generateStreamingCoachingResponse(request: CoachingRequest): Promise<AsyncIterable<string>> {
+    try {
+      await this.checkRateLimit();
+
+      const contextualPrompt = this.buildContextualPrompt(request);
+      
+      const stream = this.anthropic.messages.stream({
+        model: this.config.model!,
+        max_tokens: this.config.maxTokens!,
+        temperature: this.config.temperature,
+        system: this.SYSTEM_PROMPT,
+        messages: [
+          {
+            role: 'user',
+            content: contextualPrompt
+          }
+        ]
+      });
+
+      // Return async generator that yields text chunks
+      return this.createTextStreamGenerator(stream);
+    } catch (error) {
+      throw this.handleError(error);
+    }
+  }
+
+  /**
+   * Create an async generator that yields text chunks from the stream
+   */
+  private async* createTextStreamGenerator(stream: any): AsyncGenerator<string, void, unknown> {
+    try {
+      let buffer = '';
+      let isInBracket = false;
+      
+      for await (const chunk of stream) {
+        if (chunk.type === 'content_block_delta' && chunk.delta?.type === 'text_delta') {
+          const text = chunk.delta.text;
+          buffer += text;
+          
+          // Simple streaming filter to catch obvious meta-commentary
+          for (const char of text) {
+            if (char === '[') {
+              isInBracket = true;
+              continue;
+            }
+            if (char === ']') {
+              isInBracket = false;
+              continue;
+            }
+            
+            // Only yield characters that are not inside brackets
+            if (!isInBracket) {
+              yield char;
+            }
+          }
+        }
+      }
+      
+      // At the end, apply full cleaning to any remaining content in case we missed something
+      const cleaned = this.cleanCoachingResponse(buffer);
+      if (cleaned !== buffer) {
+        // If we had to clean more content, it means some meta-commentary slipped through
+        // This is a backup - the system prompt should prevent this
+        console.warn('Meta-commentary detected in streaming response - cleaned');
+      }
+    } catch (error) {
+      throw this.handleError(error);
+    }
+  }
+
+  /**
    * Analyze strengths profile and generate comprehensive insights
    */
   async analyzeStrengthsProfile(request: AnalysisRequest, profile: UserProfile): Promise<AnalysisResponse> {
@@ -165,9 +216,13 @@ You are not a static report generator. You are an interactive guide helping them
     // Add strengths profile context if available
     if (request.strengthsProfile) {
       const profile = request.strengthsProfile;
+      const assessmentDate = profile.assessmentDate instanceof Date 
+        ? profile.assessmentDate.toISOString().split('T')[0]
+        : new Date(profile.assessmentDate).toISOString().split('T')[0];
+      
       prompt += `User's CliftonStrengths Profile:
 Name: ${profile.name}
-Assessment Date: ${profile.assessmentDate.toISOString().split('T')[0]}
+Assessment Date: ${assessmentDate}
 Format: ${profile.format}
 Leading Domain: ${profile.leadingDomain}
 
@@ -226,10 +281,14 @@ Please provide personalized coaching advice based on their strengths profile.`;
    * Build analysis prompt for comprehensive strengths analysis
    */
   private buildAnalysisPrompt(profile: UserProfile, analysisType: string): string {
+    const assessmentDate = profile.assessmentDate instanceof Date 
+      ? profile.assessmentDate.toISOString().split('T')[0]
+      : new Date(profile.assessmentDate).toISOString().split('T')[0];
+    
     return `Please provide a comprehensive analysis of this CliftonStrengths profile:
 
 Name: ${profile.name}
-Assessment Date: ${profile.assessmentDate.toISOString().split('T')[0]}
+Assessment Date: ${assessmentDate}
 Format: ${profile.format}
 
 All Strengths (in order):
@@ -256,16 +315,36 @@ Format your response as structured JSON with the following fields:
   }
 
   /**
+   * Clean response to remove any meta-commentary or coaching explanations
+   */
+  private cleanCoachingResponse(response: string): string {
+    // Remove any content in brackets that looks like meta-commentary
+    let cleaned = response.replace(/\[.*?\]/gs, '');
+    
+    // Remove any lines that start with coaching strategy explanations
+    cleaned = cleaned.replace(/^(This response aims to|I'm keeping|My approach here|The strategy is).*$/gm, '');
+    
+    // Remove multiple consecutive newlines
+    cleaned = cleaned.replace(/\n\s*\n\s*\n/g, '\n\n');
+    
+    // Trim whitespace
+    return cleaned.trim();
+  }
+
+  /**
    * Parse Claude's response into structured coaching response
    */
   private parseCoachingResponse(claudeResponse: string, request: CoachingRequest): CoachingResponse {
     try {
+      // Clean the response first to remove any meta-commentary
+      const cleanedResponse = this.cleanCoachingResponse(claudeResponse);
+      
       // Try to extract structured information from the response
-      const suggestions = this.extractSuggestions(claudeResponse);
-      const followUpQuestions = this.extractFollowUpQuestions(claudeResponse);
+      const suggestions = this.extractSuggestions(cleanedResponse);
+      const followUpQuestions = this.extractFollowUpQuestions(cleanedResponse);
 
       return {
-        response: claudeResponse,
+        response: cleanedResponse,
         suggestions: suggestions,
         sessionId: request.sessionId || this.generateSessionId(),
         timestamp: new Date().toISOString(),

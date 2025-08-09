@@ -306,6 +306,160 @@ app.post('/api/analyze', async (req: Request, res: Response, next: NextFunction)
   }
 });
 
+// Streaming Coaching Chat endpoint
+app.post('/api/coach/stream', async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { 
+      message, 
+      context, 
+      sessionId, 
+      type = CoachingRequestType.GENERAL_CHAT,
+      strengthsProfile,
+      focusArea,
+      profileId,
+      strengthContext
+    }: CoachingRequest & { profileId?: string; strengthContext?: string } = req.body;
+
+    if (!message) {
+      return res.status(400).json({
+        error: 'Missing message',
+        message: 'Message is required for coaching chat'
+      });
+    }
+
+    // Check if Claude service is available
+    if (!claudeCoachingService) {
+      return res.status(500).json({
+        error: 'Service unavailable',
+        message: 'Claude coaching service is not configured. Please check your CLAUDE_API_KEY environment variable.'
+      });
+    }
+
+    console.log('Streaming coaching request:', { message, type, sessionId, hasProfile: !!strengthsProfile });
+
+    try {
+      let currentSessionId = sessionId;
+      
+      // Create or find chat session if we have user context
+      if (profileId && !currentSessionId) {
+        try {
+          let userId = profileId;
+          if (profileId.startsWith('assessment_')) {
+            const assessment = await dbService.getAssessmentById(profileId);
+            userId = assessment?.user_id || 'temp_user';
+          }
+          
+          const newSession = await dbService.createChatSession({
+            id: `session_${Date.now()}_${Math.random().toString(36).substr(2, 11)}`,
+            user_id: userId,
+            assessment_id: profileId.startsWith('assessment_') ? profileId : undefined,
+            session_name: strengthContext ? `Chat about ${strengthContext}` : 'General coaching session'
+          });
+          
+          currentSessionId = newSession.id;
+          console.log(`Created new chat session: ${currentSessionId}`);
+        } catch (dbError) {
+          console.error('Error creating chat session:', dbError);
+          currentSessionId = `temp_${Date.now()}_${Math.random().toString(36).substr(2, 11)}`;
+        }
+      }
+
+      // Create coaching request
+      const coachingRequest: CoachingRequest = {
+        type,
+        message,
+        strengthsProfile,
+        sessionId: currentSessionId,
+        context,
+        focusArea
+      };
+
+      // Save user message to database if we have a session
+      if (currentSessionId && !currentSessionId.startsWith('temp_')) {
+        try {
+          await dbService.saveChatMessage({
+            id: `user-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+            session_id: currentSessionId,
+            sender: 'user',
+            content: message,
+            strength_context: strengthContext
+          });
+        } catch (dbError) {
+          console.error('Error saving user message:', dbError);
+        }
+      }
+
+      // Set up Server-Sent Events
+      res.writeHead(200, {
+        'Content-Type': 'text/plain; charset=utf-8',
+        'Transfer-Encoding': 'chunked',
+        'Cache-Control': 'no-cache',
+        'Connection': 'keep-alive',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Headers': 'Cache-Control'
+      });
+
+      let fullResponse = '';
+
+      // Generate streaming coaching response using Claude
+      const stream = await claudeCoachingService.generateStreamingCoachingResponse(coachingRequest);
+
+      for await (const chunk of stream) {
+        fullResponse += chunk;
+        res.write(chunk);
+      }
+
+      // Save complete coach response to database if we have a session
+      if (currentSessionId && !currentSessionId.startsWith('temp_')) {
+        try {
+          await dbService.saveChatMessage({
+            id: `coach-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+            session_id: currentSessionId,
+            sender: 'coach',
+            content: fullResponse,
+            strength_context: strengthContext,
+            metadata: JSON.stringify({
+              type: type,
+              sessionId: currentSessionId
+            })
+          });
+        } catch (dbError) {
+          console.error('Error saving coach message:', dbError);
+        }
+      }
+
+      res.end();
+      console.log('Streaming coaching response completed for session:', currentSessionId);
+
+    } catch (serviceError) {
+      console.error('Service error during streaming coaching:', serviceError);
+      
+      if (!res.headersSent) {
+        if (serviceError instanceof Error && 'code' in serviceError) {
+          const error = serviceError as ServiceError;
+          const statusCode = error.statusCode || 500;
+          
+          return res.status(statusCode).json({
+            error: error.code,
+            message: error.message
+          });
+        }
+      } else {
+        res.write(`\n\nError: ${serviceError instanceof Error ? serviceError.message : 'Unknown error occurred'}`);
+        res.end();
+      }
+    }
+
+  } catch (error) {
+    console.error('Unexpected error in streaming coaching:', error);
+    if (!res.headersSent) {
+      next(error);
+    } else {
+      res.end();
+    }
+  }
+});
+
 // Coaching Chat endpoint
 app.post('/api/coach', async (req: Request, res: Response, next: NextFunction) => {
   try {
