@@ -1,0 +1,10 @@
+backend/
+shared/
+node_modules/
+*.log
+.env*
+!.env.example
+uploads/
+data/
+dist/
+start.sh

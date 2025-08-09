@@ -111,7 +111,7 @@ export default function Dashboard({
                     </svg>
                   </div>
                   <h3 className="text-xl font-semibold text-gray-800">
-                    What You'll Discover
+                    What You&apos;ll Discover
                   </h3>
                 </div>
                 <div className="space-y-3">
