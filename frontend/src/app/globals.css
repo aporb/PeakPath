@@ -1,0 +1,153 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+/* Base responsive design */
+html {
+  /* Prevent zoom on iOS devices */
+  -webkit-text-size-adjust: 100%;
+  /* Smooth scrolling */
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  /* Prevent horizontal scroll on mobile */
+  overflow-x: hidden;
+  /* Better text rendering */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Mobile-first responsive utilities */
+.container-responsive {
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+@media (min-width: 640px) {
+  .container-responsive {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container-responsive {
+    max-width: 1200px;
+  }
+}
+
+/* Touch-friendly interactions */
+button, 
+[role="button"], 
+.clickable {
+  /* Minimum touch target size */
+  min-height: 44px;
+  min-width: 44px;
+  /* Better touch feedback */
+  -webkit-tap-highlight-color: rgba(59, 130, 246, 0.1);
+  tap-highlight-color: rgba(59, 130, 246, 0.1);
+}
+
+/* Improve form controls on mobile */
+input, 
+select, 
+textarea {
+  /* Prevent zoom on iOS */
+  font-size: 16px;
+  /* Better touch interaction */
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+@media (min-width: 640px) {
+  input, 
+  select, 
+  textarea {
+    font-size: 14px;
+  }
+}
+
+/* Mobile-specific adjustments */
+@media (max-width: 640px) {
+  /* Reduce spacing on small screens */
+  .mobile-compact {
+    padding: 1rem !important;
+  }
+  
+  /* Stack elements vertically on mobile */
+  .mobile-stack > * {
+    width: 100% !important;
+    margin-bottom: 0.5rem;
+  }
+  
+  /* Hide elements on mobile if needed */
+  .mobile-hidden {
+    display: none !important;
+  }
+}
+
+/* Focus states for accessibility */
+button:focus-visible,
+[role="button"]:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/* Loading and transition improvements */
+.smooth-transition {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Backdrop blur support fallback */
+.backdrop-blur-fallback {
+  background: rgba(255, 255, 255, 0.95);
+}
+
+@supports (backdrop-filter: blur(8px)) {
+  .backdrop-blur-fallback {
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(8px);
+  }
+}
+
+/* Chat widget mobile adjustments */
+@media (max-width: 768px) {
+  .floating-chat-mobile {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    border-radius: 0 !important;
+    z-index: 9999;
+  }
+}
