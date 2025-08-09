@@ -24,6 +24,8 @@ export default function PeakPathApp() {
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
   const [isChatTyping, setIsChatTyping] = useState(false);
   const [isChatOpen, setIsChatOpen] = useState(false);
+  const [isChatExpanded, setIsChatExpanded] = useState(false);
+  const [currentStrengthFocus, setCurrentStrengthFocus] = useState<string | undefined>();
   
   // Loading states
   const [uploadProgress, setUploadProgress] = useState(0);
@@ -46,37 +48,83 @@ export default function PeakPathApp() {
     return response.json();
   };
 
-  const sendChatMessage = useCallback(async (message: string, strengthContext?: string): Promise<ChatMessage> => {
+  const sendChatMessage = useCallback(async (
+    message: string, 
+    strengthContext?: string,
+    onChunk?: (chunk: string) => void
+  ): Promise<ChatMessage> => {
+    const requestBody = {
+      message,
+      strengthContext,
+      profileId: strengthProfile?.id,
+      conversationHistory: chatMessages.slice(-10), // Send last 10 messages for context
+      strengthsProfile: strengthProfile ? {
+        name: strengthProfile.userId, // Using userId as name since that's what we have
+        assessmentDate: strengthProfile.assessmentDate,
+        format: 'PDF Upload',
+        topFive: strengthProfile.strengths.filter(s => s.isTopFive).map(s => ({
+          name: s.name,
+          rank: s.rank,
+          domain: s.domain.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase()),
+          description: s.description
+        })),
+        strengths: strengthProfile.strengths.map(s => ({
+          name: s.name,
+          rank: s.rank,
+          domain: s.domain.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase()),
+          description: s.description
+        })),
+        leadingDomain: strengthProfile.strengths[0]?.domain.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase()),
+        domainSummary: []
+      } : undefined,
+    };
+
+    // Use streaming endpoint if onChunk callback is provided
+    if (onChunk) {
+      const response = await fetch(`${API_BASE_URL}/api/coach/stream`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(requestBody),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.message || 'Streaming chat failed');
+      }
+
+      let fullContent = '';
+      const reader = response.body?.getReader();
+      const decoder = new TextDecoder();
+
+      if (reader) {
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          
+          const chunk = decoder.decode(value, { stream: true });
+          fullContent += chunk;
+          onChunk(chunk);
+        }
+      }
+
+      return {
+        id: `coach-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+        content: fullContent,
+        sender: 'coach',
+        timestamp: new Date(),
+        strengthContext,
+      };
+    }
+
+    // Fallback to non-streaming endpoint
     const response = await fetch(`${API_BASE_URL}/api/coach`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        message,
-        strengthContext,
-        profileId: strengthProfile?.id,
-        conversationHistory: chatMessages.slice(-10), // Send last 10 messages for context
-        strengthsProfile: strengthProfile ? {
-          name: strengthProfile.userId, // Using userId as name since that's what we have
-          assessmentDate: strengthProfile.assessmentDate,
-          format: 'PDF Upload',
-          topFive: strengthProfile.strengths.filter(s => s.isTopFive).map(s => ({
-            name: s.name,
-            rank: s.rank,
-            domain: s.domain.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase()),
-            description: s.description
-          })),
-          strengths: strengthProfile.strengths.map(s => ({
-            name: s.name,
-            rank: s.rank,
-            domain: s.domain.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase()),
-            description: s.description
-          })),
-          leadingDomain: strengthProfile.strengths[0]?.domain.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase()),
-          domainSummary: []
-        } : undefined,
-      }),
+      body: JSON.stringify(requestBody),
     });
 
     if (!response.ok) {
@@ -146,24 +194,48 @@ export default function PeakPathApp() {
     setChatMessages(prev => [...prev, userMessage]);
     setIsChatTyping(true);
 
+    // Create a streaming coach message that updates in real-time
+    const coachMessageId = `coach-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    const streamingCoachMessage: ChatMessage = {
+      id: coachMessageId,
+      content: '',
+      sender: 'coach',
+      timestamp: new Date(),
+      strengthContext,
+    };
+
+    // Add the empty coach message that will be updated as we stream
+    setChatMessages(prev => [...prev, streamingCoachMessage]);
+
     try {
-      const coachResponse = await sendChatMessage(messageContent, strengthContext);
-      setChatMessages(prev => [...prev, coachResponse]);
+      await sendChatMessage(messageContent, strengthContext, (chunk: string) => {
+        // Update the streaming message with new chunks
+        setChatMessages(prev => 
+          prev.map(msg => 
+            msg.id === coachMessageId 
+              ? { ...msg, content: msg.content + chunk }
+              : msg
+          )
+        );
+      });
     } catch (error) {
-      // Add error message from coach
-      const errorMessage: ChatMessage = {
-        id: `error-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-        content: 'I apologize, but I encountered an error processing your message. Please try again.',
-        sender: 'coach',
-        timestamp: new Date(),
-      };
-      setChatMessages(prev => [...prev, errorMessage]);
+      // Replace the streaming message with an error message
+      setChatMessages(prev => 
+        prev.map(msg => 
+          msg.id === coachMessageId 
+            ? {
+                ...msg,
+                content: 'I apologize, but I encountered an error processing your message. Please try again.'
+              }
+            : msg
+        )
+      );
     } finally {
       setIsChatTyping(false);
     }
   }, [sendChatMessage]);
 
-  // Strength Click Handler
+  // Strength Click Handler - Opens chat with strength context, doesn't send automatic message
   const handleStrengthClick = useCallback((strength: Strength) => {
     console.log('Strength clicked:', strength.name);
     if (isChatTyping) {
@@ -171,11 +243,10 @@ export default function PeakPathApp() {
       return;
     }
     
-    console.log('Opening chat and sending welcome message');
+    console.log('Opening chat with strength context');
+    setCurrentStrengthFocus(strength.name);
     setIsChatOpen(true);
-    const welcomeMessage = `Let's talk about your ${strength.name} strength (ranked #${strength.rank}). What would you like to explore?`;
-    handleSendMessage(welcomeMessage, strength.name);
-  }, [handleSendMessage, isChatTyping]);
+  }, [isChatTyping]);
 
   // Start Coaching Handler
   const handleStartCoaching = useCallback(() => {
@@ -195,6 +266,8 @@ export default function PeakPathApp() {
     setAppError(null);
     setChatMessages([]);
     setIsChatOpen(false);
+    setIsChatExpanded(false);
+    setCurrentStrengthFocus(undefined);
     setUploadProgress(0);
   }, []);
 
@@ -234,12 +307,33 @@ export default function PeakPathApp() {
 
       case 'dashboard':
         return (
-          <Dashboard 
-            profile={strengthProfile || undefined}
-            onFileUpload={handleFileUpload}
-            onStrengthClick={handleStrengthClick}
-            onStartCoaching={handleStartCoaching}
-          />
+          <div className={`flex h-screen ${isChatExpanded ? 'overflow-hidden' : ''}`}>
+            {/* Expanded Chat Panel */}
+            {isChatExpanded && (
+              <div className="w-1/3 border-r border-gray-200 bg-white flex flex-col">
+                <CoachChat
+                  messages={chatMessages}
+                  onSendMessage={handleSendMessage}
+                  isTyping={isChatTyping}
+                  relatedStrengths={strengthProfile?.strengths.filter(s => s.isTopFive) || []}
+                  isExpanded={true}
+                  onToggleExpanded={() => setIsChatExpanded(false)}
+                  initialStrengthFocus={currentStrengthFocus}
+                  className="h-full"
+                />
+              </div>
+            )}
+            
+            {/* Main Dashboard Content */}
+            <div className={`${isChatExpanded ? 'w-2/3' : 'w-full'} overflow-auto`}>
+              <Dashboard 
+                profile={strengthProfile || undefined}
+                onFileUpload={handleFileUpload}
+                onStrengthClick={handleStrengthClick}
+                onStartCoaching={handleStartCoaching}
+              />
+            </div>
+          </div>
         );
 
       case 'error':
@@ -314,6 +408,7 @@ export default function PeakPathApp() {
                     onSendMessage={handleSendMessage}
                     isTyping={isChatTyping}
                     relatedStrengths={strengthProfile?.strengths.filter(s => s.isTopFive) || []}
+                    initialStrengthFocus={currentStrengthFocus}
                     className="h-full"
                   />
                 </div>
@@ -322,25 +417,46 @@ export default function PeakPathApp() {
           )}
           
           {/* Desktop: Floating chat widget */}
-          <div className="hidden md:block">
-            <FloatingChat
-              isOpen={isChatOpen}
-              onToggle={() => setIsChatOpen(!isChatOpen)}
-              messages={chatMessages}
-              onSendMessage={handleSendMessage}
-              isTyping={isChatTyping}
-              relatedStrengths={strengthProfile?.strengths.filter(s => s.isTopFive) || []}
-            />
-          </div>
+          {!isChatExpanded && (
+            <div className="hidden md:block">
+              <FloatingChat
+                isOpen={isChatOpen}
+                onToggle={() => setIsChatOpen(!isChatOpen)}
+                messages={chatMessages}
+                onSendMessage={handleSendMessage}
+                isTyping={isChatTyping}
+                relatedStrengths={strengthProfile?.strengths.filter(s => s.isTopFive) || []}
+                isExpanded={false}
+                initialStrengthFocus={currentStrengthFocus}
+                onToggleExpanded={() => {
+                  setIsChatExpanded(true);
+                  setIsChatOpen(false);
+                }}
+              />
+            </div>
+          )}
           
           {/* Mobile: Floating chat button */}
-          {!isChatOpen && (
+          {!isChatOpen && !isChatExpanded && (
             <button
               onClick={() => setIsChatOpen(true)}
               className="md:hidden fixed bottom-4 right-4 z-40 w-14 h-14 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full shadow-lg flex items-center justify-center hover:shadow-xl transform hover:scale-105 transition-all duration-200"
             >
               <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+              </svg>
+            </button>
+          )}
+
+          {/* Expand Chat Button - when neither floating nor expanded is open */}
+          {!isChatOpen && !isChatExpanded && (
+            <button
+              onClick={() => setIsChatExpanded(true)}
+              className="hidden md:block fixed bottom-4 right-20 z-40 w-12 h-12 bg-gradient-to-br from-purple-500 to-blue-600 rounded-full shadow-lg flex items-center justify-center hover:shadow-xl transform hover:scale-105 transition-all duration-200"
+              title="Expand chat to full panel"
+            >
+              <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
               </svg>
             </button>
           )}

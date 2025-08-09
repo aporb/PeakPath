@@ -10,6 +10,9 @@ interface CoachChatProps {
   isTyping?: boolean;
   className?: string;
   relatedStrengths?: Strength[];
+  isExpanded?: boolean;
+  onToggleExpanded?: () => void;
+  initialStrengthFocus?: string; // Add prop for initial strength context
 }
 
 export default function CoachChat({ 
@@ -17,11 +20,14 @@ export default function CoachChat({
   onSendMessage, 
   isTyping = false, 
   className = '',
-  relatedStrengths = []
+  relatedStrengths = [],
+  isExpanded = false,
+  onToggleExpanded,
+  initialStrengthFocus
 }: CoachChatProps) {
   const [inputMessage, setInputMessage] = useState('');
   const [selectedStrength, setSelectedStrength] = useState<string | undefined>();
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -30,6 +36,13 @@ export default function CoachChat({
   };
 
   useEffect(scrollToBottom, [messages, isTyping]);
+
+  // Set initial strength focus when provided
+  useEffect(() => {
+    if (initialStrengthFocus && initialStrengthFocus !== selectedStrength) {
+      setSelectedStrength(initialStrengthFocus);
+    }
+  }, [initialStrengthFocus, selectedStrength]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -66,123 +79,147 @@ export default function CoachChat({
     "What are some practical development activities?"
   ];
 
+  // Clean and readable message formatting
+  const formatCoachMessage = (content: string): string => {
+    return content
+      // Bold text - keep simple
+      .replace(/\*\*(.*?)\*\*/g, '<strong class="font-semibold text-gray-900">$1</strong>')
+      // Simple bullet points
+      .replace(/^[\-\*]\s+(.+)$/gm, '<div class="flex items-start mb-2"><div class="w-1 h-1 bg-gray-400 rounded-full mr-3 mt-2 flex-shrink-0"></div><span>$1</span></div>')
+      // Numbered lists
+      .replace(/^\d+\.\s+(.+)$/gm, '<div class="flex items-start mb-2"><span class="text-gray-500 text-sm mr-2 mt-0.5 font-medium">$&</span><span>$1</span></div>')
+      // Questions - subtle highlighting
+      .replace(/^(.+\?)$/gm, '<div class="bg-blue-50 rounded-lg p-3 my-3"><p class="text-gray-800">$1</p></div>')
+      // Line breaks
+      .replace(/\n\n/g, '<div class="my-4"></div>')
+      .replace(/\n/g, '<br/>');
+  };
+
   return (
     <div className={`bg-white rounded-xl shadow-lg backdrop-blur-sm bg-opacity-95 flex flex-col ${className}`}>
-      {/* Header */}
-      <div className="flex items-center justify-between p-4 border-b border-gray-200">
-        <div className="flex items-center space-x-3">
-          <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
-            <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      {/* Minimal Header */}
+      <div className="flex items-center justify-between p-3 border-b border-gray-200 bg-white">
+        <div className="flex items-center space-x-2">
+          <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
+            <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
             </svg>
           </div>
           <div>
-            <h3 className="font-semibold text-gray-800">AI Strengths Coach</h3>
-            <p className="text-xs text-gray-500">
-              {isTyping ? 'Typing...' : 'Ready to help you grow'}
-            </p>
+            <h3 className="font-medium text-gray-800 text-sm">AI Strengths Coach</h3>
+            {selectedStrength && (
+              <p className="text-xs text-purple-600 font-medium">💪 {selectedStrength}</p>
+            )}
           </div>
         </div>
         
-        <button
-          onClick={() => setIsExpanded(!isExpanded)}
-          className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
-        >
-          <svg 
-            className={`w-5 h-5 text-gray-500 transform transition-transform ${isExpanded ? 'rotate-180' : ''}`} 
-            fill="none" 
-            stroke="currentColor" 
-            viewBox="0 0 24 24"
+        <div className="flex items-center space-x-1">
+          {onToggleExpanded && (
+            <button
+              onClick={onToggleExpanded}
+              className="p-1.5 hover:bg-gray-100 rounded-md transition-colors"
+              title={isExpanded ? "Collapse chat" : "Expand chat"}
+            >
+              <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                {isExpanded ? (
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 9l6 6m0-6l-6 6" />
+                ) : (
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
+                )}
+              </svg>
+            </button>
+          )}
+          <button
+            onClick={() => setIsCollapsed(!isCollapsed)}
+            className="p-1.5 hover:bg-gray-100 rounded-md transition-colors"
           >
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-          </svg>
-        </button>
+            <svg 
+              className={`w-4 h-4 text-gray-500 transform transition-transform ${isCollapsed ? 'rotate-180' : ''}`} 
+              fill="none" 
+              stroke="currentColor" 
+              viewBox="0 0 24 24"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+        </div>
       </div>
 
-      {/* Strength Context Selector */}
-      {relatedStrengths.length > 0 && (
-        <div className="p-4 border-b border-gray-100 bg-gray-50">
-          <label className="text-xs font-medium text-gray-700 mb-2 block">
-            Focus on specific strength (optional):
-          </label>
-          <select
-            value={selectedStrength || ''}
-            onChange={(e) => setSelectedStrength(e.target.value || undefined)}
-            className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-          >
-            <option value="">All strengths</option>
-            {relatedStrengths.map((strength) => (
-              <option key={strength.id} value={strength.name}>
-                {strength.name} (#{strength.rank})
-              </option>
-            ))}
-          </select>
-        </div>
-      )}
-
       {/* Messages */}
-      <div className={`flex-1 overflow-y-auto p-4 space-y-4 ${isExpanded ? 'h-96' : 'h-64'}`}>
+      <div className={`flex-1 overflow-y-auto p-3 space-y-3 ${isCollapsed ? 'h-16' : isExpanded ? 'min-h-[500px]' : 'h-80'}`}>
         {messages.length === 0 && (
-          <div className="text-center py-8">
-            <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <svg className="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+          <div className="flex flex-col items-center justify-center h-full text-center py-6">
+            <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center mb-3">
+              <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
               </svg>
             </div>
-            <h4 className="font-medium text-gray-800 mb-2">Ready to unlock your potential?</h4>
-            <p className="text-sm text-gray-600 mb-4">
-              Ask me anything about your strengths, career development, or how to apply your talents.
+            <h4 className="font-medium text-gray-800 mb-1 text-sm">Start a conversation</h4>
+            <p className="text-xs text-gray-600 mb-4 max-w-xs">
+              {selectedStrength 
+                ? `Let's explore your ${selectedStrength} strength together.`
+                : 'Ask me anything about your strengths or development.'
+              }
             </p>
-            
-            {/* Quick Actions */}
-            <div className="space-y-2">
-              <p className="text-xs text-gray-500 font-medium">Quick starters:</p>
-              <div className="flex flex-wrap gap-2 justify-center">
-                {quickActions.slice(0, 3).map((action, index) => (
-                  <button
-                    key={index}
-                    onClick={() => handleQuickAction(action)}
-                    className="px-3 py-1 text-xs bg-blue-50 text-blue-600 rounded-full hover:bg-blue-100 transition-colors"
-                  >
-                    {action}
-                  </button>
-                ))}
-              </div>
-            </div>
           </div>
         )}
 
-        {messages.map((message) => (
+        {messages.map((message, index) => (
           <div
             key={message.id}
-            className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
+            className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'} mb-3`}
           >
-            <div
-              className={`max-w-[80%] rounded-lg px-4 py-2 ${
-                message.sender === 'user'
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-gray-100 text-gray-800'
-              }`}
-            >
-              {message.strengthContext && (
-                <div className="text-xs opacity-75 mb-1">
+            {message.sender === 'coach' && (
+              <div className="flex-shrink-0 w-6 h-6 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center mr-2 mt-1">
+                <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01" />
+                </svg>
+              </div>
+            )}
+            
+            <div className={`flex flex-col ${message.sender === 'user' ? 'items-end' : 'items-start'} max-w-[90%]`}>
+              <div
+                className={`rounded-2xl px-4 py-3 ${
+                  message.sender === 'user'
+                    ? 'bg-blue-600 text-white'
+                    : 'bg-gray-50 text-gray-800 border border-gray-200'
+                }`}
+              >
+                <div 
+                  className="text-sm leading-relaxed"
+                  dangerouslySetInnerHTML={{
+                    __html: message.sender === 'coach' 
+                      ? formatCoachMessage(message.content)
+                      : message.content.replace(/\n/g, '<br/>')
+                  }}
+                />
+              </div>
+              
+              {message.strengthContext && message.sender === 'user' && (
+                <div className="mt-1 px-2 py-1 bg-purple-100 text-purple-600 rounded-full text-xs font-medium">
                   💪 {message.strengthContext}
                 </div>
               )}
-              <p className="text-sm whitespace-pre-wrap">{message.content}</p>
-              <p className={`text-xs mt-1 ${
-                message.sender === 'user' ? 'text-blue-100' : 'text-gray-500'
-              }`}>
-                {formatTime(message.timestamp)}
-              </p>
             </div>
           </div>
         ))}
 
         {isTyping && (
-          <div className="flex justify-start">
-            <div className="bg-gray-100 rounded-lg px-4 py-2 max-w-[80%]">
-              <LoadingSpinner size="sm" className="my-1" />
+          <div className="flex justify-start mb-3">
+            <div className="flex-shrink-0 w-6 h-6 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center mr-2 mt-1">
+              <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01" />
+              </svg>
+            </div>
+            <div className="bg-gray-50 border border-gray-200 rounded-2xl px-4 py-3">
+              <div className="flex items-center space-x-2">
+                <div className="flex space-x-1">
+                  <div className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style={{animationDelay: '0ms'}}></div>
+                  <div className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style={{animationDelay: '150ms'}}></div>
+                  <div className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style={{animationDelay: '300ms'}}></div>
+                </div>
+                <span className="text-gray-500 text-xs">Thinking...</span>
+              </div>
             </div>
           </div>
         )}
@@ -190,45 +227,51 @@ export default function CoachChat({
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Quick Actions (when chat has messages) */}
-      {messages.length > 0 && (
-        <div className="px-4 py-2 border-t border-gray-100">
-          <div className="flex flex-wrap gap-2">
-            {quickActions.slice(0, 2).map((action, index) => (
-              <button
-                key={index}
-                onClick={() => handleQuickAction(action)}
-                className="px-2 py-1 text-xs bg-gray-100 text-gray-600 rounded-full hover:bg-gray-200 transition-colors"
-              >
-                {action}
-              </button>
-            ))}
-          </div>
-        </div>
-      )}
 
-      {/* Input */}
-      <form onSubmit={handleSubmit} className="p-4 border-t border-gray-200">
-        <div className="flex space-x-3">
-          <input
-            ref={inputRef}
-            type="text"
-            value={inputMessage}
-            onChange={(e) => setInputMessage(e.target.value)}
-            placeholder={selectedStrength ? `Ask about ${selectedStrength}...` : "Ask about your strengths..."}
-            className="flex-1 px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
-            disabled={isTyping}
-          />
+      {/* Compact Input */}
+      <form onSubmit={handleSubmit} className="p-3 bg-white border-t border-gray-200">
+        <div className="flex items-center space-x-2">
+          <div className="flex-1">
+            <input
+              ref={inputRef}
+              type="text"
+              value={inputMessage}
+              onChange={(e) => setInputMessage(e.target.value)}
+              placeholder={selectedStrength ? `Ask about ${selectedStrength}...` : "Ask about your strengths..."}
+              className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none bg-white transition-all duration-200 placeholder-gray-500 text-sm"
+              disabled={isTyping}
+            />
+          </div>
           <button
             type="submit"
             disabled={!inputMessage.trim() || isTyping}
-            className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            className="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-2.5 rounded-xl hover:from-blue-700 hover:to-purple-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
           >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-            </svg>
+            {isTyping ? (
+              <svg className="w-4 h-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+              </svg>
+            ) : (
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+              </svg>
+            )}
           </button>
         </div>
+        
+        {/* Strength Context Display */}
+        {selectedStrength && (
+          <div className="flex items-center justify-between mt-2 pt-2 border-t border-gray-100">
+            <span className="text-xs bg-purple-50 text-purple-700 px-2 py-1 rounded-full">💪 Focusing on {selectedStrength}</span>
+            <button 
+              type="button"
+              onClick={() => setSelectedStrength(undefined)}
+              className="text-xs text-gray-400 hover:text-gray-600"
+            >
+              Clear
+            </button>
+          </div>
+        )}
       </form>
     </div>
   );
