@@ -49,7 +49,8 @@ peakpath/
 
 ### 1. Clone and Install
 ```bash
-cd /Users/amynporb/Documents/projects/personal-coach/peakpath
+git clone https://github.com/aporb/PeakPath.git
+cd PeakPath
 npm install
 ```
 
