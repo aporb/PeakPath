@@ -57,6 +57,25 @@ export default function PeakPathApp() {
         strengthContext,
         profileId: strengthProfile?.id,
         conversationHistory: chatMessages.slice(-10), // Send last 10 messages for context
+        strengthsProfile: strengthProfile ? {
+          name: strengthProfile.userId, // Using userId as name since that's what we have
+          assessmentDate: strengthProfile.assessmentDate,
+          format: 'PDF Upload',
+          topFive: strengthProfile.strengths.filter(s => s.isTopFive).map(s => ({
+            name: s.name,
+            rank: s.rank,
+            domain: s.domain.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase()),
+            description: s.description
+          })),
+          strengths: strengthProfile.strengths.map(s => ({
+            name: s.name,
+            rank: s.rank,
+            domain: s.domain.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase()),
+            description: s.description
+          })),
+          leadingDomain: strengthProfile.strengths[0]?.domain.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase()),
+          domainSummary: []
+        } : undefined,
       }),
     });
 
