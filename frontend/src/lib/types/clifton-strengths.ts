@@ -17,7 +17,7 @@ export enum StrengthFormat {
 }
 
 export interface Strength {
-  /** Strength name (e.g., "Restorative", "Connectedness") */
+  /** Strength name from CliftonStrengths assessment */
   name: string;
   
   /** Ranking from 1-34 (1 being strongest) */

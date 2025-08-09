@@ -72,7 +72,7 @@ export class CliftonStrengthsPDFParser {
       if (strengths.length === 0) {
         return {
           success: false,
-          error: 'Could not find any strengths in PDF'
+          error: 'Could not parse any CliftonStrengths from the PDF. Please ensure this is a valid CliftonStrengths report with numbered strength rankings.'
         };
       }
 
@@ -208,23 +208,10 @@ export class CliftonStrengthsPDFParser {
       }
     }
 
-    // Fallback: If we couldn't parse properly, return a demo profile instead of adding all strengths
+    // No fallback demo data - if we can't parse strengths, we should fail
     if (strengths.length === 0) {
-      const demoStrengths = [
-        'Restorative', 'Connectedness', 'Input', 'Arranger', 'Learner'
-      ];
-      
-      demoStrengths.forEach((strengthName, index) => {
-        if (STRENGTH_DOMAIN_MAP[strengthName]) {
-          strengths.push({
-            name: strengthName,
-            rank: index + 1,
-            domain: STRENGTH_DOMAIN_MAP[strengthName],
-            description: ALL_STRENGTHS_INFO[strengthName] || '',
-            hasTrademarkSymbol: false
-          });
-        }
-      });
+      console.error('Failed to parse any strengths from PDF content');
+      return [];
     }
 
     // Remove duplicates by name and ensure proper ranking
