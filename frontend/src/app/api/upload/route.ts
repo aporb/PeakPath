@@ -62,10 +62,12 @@ export async function POST(request: NextRequest) {
     const frontendProfile = {
       id: `assessment_${Date.now()}`, // Generate assessment ID
       userId: `user_${profile.name.replace(/\s+/g, '_').toLowerCase()}`,
+      userName: profile.name, // Store actual user name
       strengths: strengthsWithIds,
       assessmentDate: profile.assessmentDate,
       reportUrl: `temp_${Date.now()}`,
-      fullPDFContent: parseResult.fullTextContent // Include for comprehensive AI analysis
+      fullPDFContent: parseResult.fullTextContent, // Include for comprehensive AI analysis
+      additionalUserInfo: (parseResult as any).additionalUserInfo || {} // Store additional user data
     };
 
     console.log(`Successfully parsed ${profile.strengths.length} strengths for ${profile.name}`);
