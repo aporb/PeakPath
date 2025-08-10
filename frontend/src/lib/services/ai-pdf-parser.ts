@@ -57,8 +57,8 @@ export class AIPDFParser {
           'anthropic-version': '2023-06-01'
         },
         body: JSON.stringify({
-          model: 'claude-3-haiku-20240307',
-          max_tokens: 2000,
+          model: 'claude-sonnet-4-20250514',
+          max_tokens: 8000,
           messages: [{
             role: 'user',
             content: prompt
@@ -90,7 +90,7 @@ export class AIPDFParser {
     return `Please analyze this CliftonStrengths PDF report and extract ALL the user information and assessment data. Return your response as a JSON object with the exact structure shown below.
 
 PDF Content:
-${pdfText.substring(0, 10000)} ${pdfText.length > 10000 ? '...[truncated]' : ''}
+${pdfText}
 
 Please extract:
 1. The user's full name (the person who took the assessment)
