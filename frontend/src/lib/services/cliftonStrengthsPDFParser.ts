@@ -13,6 +13,7 @@ import {
   STRENGTH_DOMAIN_MAP,
   ALL_STRENGTHS_INFO
 } from '../types/clifton-strengths';
+import { AIPDFParser } from './ai-pdf-parser';
 
 export class CliftonStrengthsPDFParser {
 
@@ -34,7 +35,7 @@ export class CliftonStrengthsPDFParser {
         };
       }
 
-      return this.parseTextContent(text);
+      return await this.parseTextContent(text);
     } catch (error) {
       console.error('Error parsing PDF buffer:', error);
       return {
@@ -47,16 +48,93 @@ export class CliftonStrengthsPDFParser {
   /**
    * Parse extracted text content from PDF
    */
-  private parseTextContent(text: string): ParsedPDFResult {
+  private async parseTextContent(text: string): Promise<ParsedPDFResult> {
     try {
-      // Extract user name
-      const name = this.extractUserName(text);
-      if (!name) {
-        return {
-          success: false,
-          error: 'Could not find user name in PDF'
-        };
+      // First, try AI-powered extraction
+      const aiParser = new AIPDFParser();
+      const aiResult = await aiParser.extractDataWithAI(text);
+      
+      if (aiResult.success && aiResult.data) {
+        console.log('Using AI-powered extraction for PDF parsing');
+        return this.processAIExtractionResult(aiResult.data, text);
+      } else {
+        console.log('AI extraction failed, falling back to regex parsing:', aiResult.error);
+        return this.fallbackToRegexParsing(text);
       }
+    } catch (error) {
+      console.error('Error in parseTextContent:', error);
+      return this.fallbackToRegexParsing(text);
+    }
+  }
+
+  /**
+   * Process AI extraction result into UserProfile format
+   */
+  private processAIExtractionResult(aiData: any, fullText: string): ParsedPDFResult {
+    try {
+      // Map AI strengths to our Strength format with domains
+      const strengths: Strength[] = aiData.strengths.map((s: any) => ({
+        name: s.name,
+        rank: s.rank,
+        domain: STRENGTH_DOMAIN_MAP[s.name] || StrengthDomain.EXECUTING, // Default domain
+        description: s.description || ALL_STRENGTHS_INFO[s.name] || '',
+        hasTrademarkSymbol: false
+      }));
+
+      // Determine format based on number of strengths
+      let format: StrengthFormat;
+      if (strengths.length >= 30) {
+        format = StrengthFormat.FULL_34;
+      } else if (strengths.length >= 8) {
+        format = StrengthFormat.TOP_10;
+      } else {
+        format = StrengthFormat.TOP_5;
+      }
+
+      // Create domain summary
+      const domainSummary = this.createDomainSummary(strengths);
+      
+      // Find leading domain
+      const leadingDomain = this.findLeadingDomain(strengths.slice(0, 5));
+
+      // Parse assessment date
+      const assessmentDate = new Date(aiData.assessmentDate);
+
+      // Create user profile
+      const profile: UserProfile = {
+        name: aiData.userName,
+        assessmentDate,
+        format,
+        strengths: strengths.sort((a, b) => a.rank - b.rank),
+        topFive: strengths.filter(s => s.rank <= 5).sort((a, b) => a.rank - b.rank),
+        topTen: strengths.length >= 10 ? strengths.filter(s => s.rank <= 10).sort((a, b) => a.rank - b.rank) : undefined,
+        domainSummary,
+        leadingDomain
+      };
+
+      return {
+        success: true,
+        data: profile,
+        warnings: [`Successfully extracted data for ${aiData.userName} using AI parsing`],
+        fullTextContent: fullText,
+        additionalUserInfo: aiData.additionalInfo // Store additional info for session
+      };
+    } catch (error) {
+      console.error('Error processing AI extraction result:', error);
+      return {
+        success: false,
+        error: `Failed to process AI extraction: ${error instanceof Error ? error.message : 'Unknown error'}`
+      };
+    }
+  }
+
+  /**
+   * Fallback to regex-based parsing if AI fails
+   */
+  private fallbackToRegexParsing(text: string): ParsedPDFResult {
+    try {
+      // Extract user name (with fallback)
+      const name = this.extractUserName(text)!; // Now always returns a name
 
       // Extract assessment date
       const assessmentDate = this.extractAssessmentDate(text);
@@ -126,10 +204,16 @@ export class CliftonStrengthsPDFParser {
   private extractUserName(text: string): string | null {
     // Look for common name patterns in CliftonStrengths reports
     const namePatterns = [
-      /CliftonStrengths\s+for\s+(.+?)(?:\n|$)/i,
-      /Report\s+for\s+(.+?)(?:\n|Date|$)/i,
-      /(?:Name|For):\s*(.+?)(?:\n|$)/i,
+      /CliftonStrengths\s+for\s+(.+?)(?:\n|Date|Completion|$)/i,
+      /Report\s+for\s+(.+?)(?:\n|Date|Completion|$)/i,
+      /(?:Name|For):\s*(.+?)(?:\n|Date|$)/i,
       /^(.+?)\s*CliftonStrengths/im,
+      /Personalized\s+Report\s+for\s+(.+?)(?:\n|$)/i,
+      /Report\s+Prepared\s+for\s+(.+?)(?:\n|$)/i,
+      /(.+?)\s+CliftonStrengths\s+Report/i,
+      // More flexible patterns for various report formats
+      /Your\s+CliftonStrengths\s+(.+?)(?:\n|$)/i,
+      /Strengths\s+Profile\s+for\s+(.+?)(?:\n|$)/i,
     ];
 
     for (const pattern of namePatterns) {
@@ -137,13 +221,20 @@ export class CliftonStrengthsPDFParser {
       if (match && match[1]) {
         const name = match[1].trim();
         // Filter out common false positives
-        if (name.length > 2 && !name.includes('Report') && !name.includes('Assessment')) {
+        if (name.length > 2 && 
+            !name.includes('Report') && 
+            !name.includes('Assessment') &&
+            !name.includes('Completion') &&
+            !name.includes('Date') &&
+            !name.match(/^\d+/)) { // Not starting with numbers
           return name;
         }
       }
     }
 
-    return null;
+    // If no name found, use a generic fallback instead of failing
+    console.warn('Could not extract user name from PDF, using generic name');
+    return 'CliftonStrengths User';
   }
 
   /**
