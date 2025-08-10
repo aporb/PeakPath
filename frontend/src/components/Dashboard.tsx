@@ -38,11 +38,12 @@ export default function Dashboard({
   });
 
   if (!profile && !isLoading) {
-    // Redirect to landing page instead of showing old embedded upload interface
-    if (typeof window !== 'undefined') {
-      window.location.href = '/';
-    }
-    return null;
+    // Show loading state while waiting for profile to load
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 flex items-center justify-center">
+        <LoadingSpinner size="xl" message="Loading..." />
+      </div>
+    );
   }
 
   return (
@@ -62,10 +63,13 @@ export default function Dashboard({
                     </div>
                     <div>
                       <h2 className="text-xl font-semibold text-gray-800">
-                        Welcome back! Your strengths are ready to explore.
+                        Welcome back{(profile as any)?.userName ? `, ${(profile as any).userName}` : ''}! Your strengths are ready to explore.
                       </h2>
                       <p className="text-gray-600 text-sm">
                         Assessment uploaded • {profile.strengths.length} strengths identified
+                        {(profile as any)?.additionalUserInfo?.organization && (
+                          <> • {(profile as any).additionalUserInfo.organization}</>
+                        )}
                       </p>
                     </div>
                   </div>

@@ -2,10 +2,11 @@
 
 import type React from "react"
 
-import { useState } from "react"
+import { useState, useRef } from "react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import { ClickableLogo } from "@/components/ClickableLogo"
 import {
   Upload,
   Brain,
@@ -23,6 +24,8 @@ export function StreamlinedLanding() {
   const [uploadStep, setUploadStep] = useState(0)
   const [isRealUpload, setIsRealUpload] = useState(false)
   const [uploadError, setUploadError] = useState<string | null>(null)
+  const fileInputRef = useRef<HTMLInputElement>(null)
+  const finalCTAInputRef = useRef<HTMLInputElement>(null)
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault()
@@ -51,6 +54,22 @@ export function StreamlinedLanding() {
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0]
+      if (file.type === 'application/pdf') {
+        handleRealFileUpload(file)
+      } else {
+        setUploadError('Please upload a PDF file')
+        setTimeout(() => setUploadError(null), 3000)
+      }
+    }
+  }
+
+  // Handle file selection from the bottom CTA with scroll to top
+  const handleFileSelectWithScroll = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      // Scroll to top to show the upload progress
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+      
       const file = e.target.files[0]
       if (file.type === 'application/pdf') {
         handleRealFileUpload(file)
@@ -96,6 +115,7 @@ export function StreamlinedLanding() {
       }, 1500)
       
     } catch (error) {
+      console.error('Upload failed:', error)
       setUploadError(error instanceof Error ? error.message : 'Upload failed')
       setUploadStep(0)
       setIsRealUpload(false)
@@ -121,15 +141,7 @@ export function StreamlinedLanding() {
       {/* Header */}
       <header className="relative z-10 px-4 py-6">
         <div className="mx-auto max-w-6xl flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-sm">PP</span>
-            </div>
-            <span className="text-xl font-bold text-slate-900">PeakPath</span>
-            <Badge variant="secondary" className="bg-blue-50 text-blue-700 border-blue-200 text-xs">
-              Alpha
-            </Badge>
-          </div>
+          <ClickableLogo />
           <a
             href="https://github.com/aporb/PeakPath"
             target="_blank"
@@ -209,18 +221,21 @@ export function StreamlinedLanding() {
                     </div>
                     <div className="space-y-4">
                       <input
+                        ref={fileInputRef}
                         type="file"
                         accept=".pdf"
                         onChange={handleFileSelect}
                         className="hidden"
                         id="file-upload"
                       />
-                      <label htmlFor="file-upload">
-                        <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white px-8 cursor-pointer">
-                          <Upload className="w-5 h-5 mr-2" />
-                          Choose File or Drop Here
-                        </Button>
-                      </label>
+                      <Button 
+                        size="lg" 
+                        className="bg-blue-600 hover:bg-blue-700 text-white px-8"
+                        onClick={() => fileInputRef.current?.click()}
+                      >
+                        <Upload className="w-5 h-5 mr-2" />
+                        Choose File or Drop Here
+                      </Button>
                       <p className="text-xs text-slate-500">
                         Your data is processed securely and never stored permanently
                       </p>
@@ -435,25 +450,22 @@ export function StreamlinedLanding() {
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <input
+                ref={finalCTAInputRef}
                 type="file"
                 accept=".pdf"
-                onChange={handleFileSelect}
+                onChange={handleFileSelectWithScroll}
                 className="hidden"
                 id="final-cta-upload"
               />
-              <label htmlFor="final-cta-upload">
-                <Button
-                  size="lg"
-                  className="bg-blue-600 hover:bg-blue-700 text-white px-8 cursor-pointer"
-                  asChild
-                >
-                  <div>
-                    <Upload className="w-5 h-5 mr-2" />
-                    Upload Your Assessment Now
-                    <ArrowRight className="w-5 h-5 ml-2" />
-                  </div>
-                </Button>
-              </label>
+              <Button
+                size="lg"
+                className="bg-blue-600 hover:bg-blue-700 text-white px-8"
+                onClick={() => finalCTAInputRef.current?.click()}
+              >
+                <Upload className="w-5 h-5 mr-2" />
+                Upload Your Assessment Now
+                <ArrowRight className="w-5 h-5 ml-2" />
+              </Button>
               <Button
                 size="lg"
                 variant="secondary"

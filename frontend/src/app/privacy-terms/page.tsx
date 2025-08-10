@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import { ClickableLogo } from "@/components/ClickableLogo"
 import { ArrowLeft, Shield, Lock, Eye, Github, FileText } from "lucide-react"
 import Link from "next/link"
 
@@ -19,15 +20,7 @@ export default function PrivacyTermsPage() {
                 Back to PeakPath
               </Button>
             </Link>
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-sm">PP</span>
-              </div>
-              <span className="text-xl font-bold text-slate-900">PeakPath</span>
-              <Badge variant="secondary" className="bg-blue-50 text-blue-700 border-blue-200 text-xs">
-                Alpha
-              </Badge>
-            </div>
+<ClickableLogo />
           </div>
           <a
             href="https://github.com/aporb/PeakPath"
