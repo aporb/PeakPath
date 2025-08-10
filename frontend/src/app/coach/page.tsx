@@ -5,6 +5,7 @@ import { StrengthProfile, ChatMessage, Strength } from '@/types/strength';
 import { Dashboard, CoachChat, FloatingChat, LoadingOverlay } from '@/components';
 import { SessionManager } from '@/lib/session-storage';
 import SessionManagerUI from '@/components/SessionManager';
+import { Button } from '@/components/ui/button';
 
 // Types for app state management
 type AppState = 'upload' | 'processing' | 'dashboard' | 'error';
@@ -606,27 +607,33 @@ export default function PeakPathApp() {
           
           {/* Mobile: Floating chat button */}
           {!isChatOpen && !isChatExpanded && (
-            <button
+            <Button
               onClick={() => setIsChatOpen(true)}
-              className="md:hidden fixed bottom-4 right-4 z-40 w-14 h-14 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full shadow-lg flex items-center justify-center hover:shadow-xl transform hover:scale-105 transition-all duration-200"
+              variant="fab"
+              size="fab-lg"
+              className="md:hidden fixed bottom-4 right-4 z-40"
+              aria-label="Open chat"
             >
-              <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
               </svg>
-            </button>
+            </Button>
           )}
 
           {/* Expand Chat Button - when neither floating nor expanded is open */}
           {!isChatOpen && !isChatExpanded && (
-            <button
+            <Button
               onClick={() => setIsChatExpanded(true)}
-              className="hidden md:block fixed bottom-4 right-20 z-40 w-12 h-12 bg-gradient-to-br from-purple-500 to-blue-600 rounded-full shadow-lg flex items-center justify-center hover:shadow-xl transform hover:scale-105 transition-all duration-200"
+              variant="fab-secondary"
+              size="fab-md"
+              className="hidden md:block fixed bottom-4 right-20 z-40"
+              aria-label="Expand chat to full panel"
               title="Expand chat to full panel"
             >
-              <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
               </svg>
-            </button>
+            </Button>
           )}
         </div>
       )}

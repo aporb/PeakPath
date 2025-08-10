@@ -49,64 +49,60 @@ export default function Dashboard({
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50">
       <div className="container mx-auto px-4 py-8">
-        {/* Enhanced Header with Welcome Message */}
+        {/* Professional Header */}
         <div className="mb-8">
-          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between">
-            <div className="flex-1">
-              {profile && (
-                <div className="bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-2xl p-6 mb-6 border border-blue-200/30">
-                  <div className="flex items-center mb-3">
-                    <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center mr-4">
-                      <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                      </svg>
+          {profile && (
+            <div className="bg-white rounded-lg border border-slate-200 shadow-sm mb-6">
+              <div className="px-6 py-4 border-b border-slate-200">
+                <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between">
+                  <div className="flex-1">
+                    <div className="flex items-center mb-1">
+                      <div className="w-2 h-2 bg-green-500 rounded-full mr-3"></div>
+                      <span className="text-sm font-medium text-slate-600">Assessment Complete</span>
                     </div>
-                    <div>
-                      <h2 className="text-xl font-semibold text-gray-800">
-                        Welcome back{(profile as any)?.userName ? `, ${(profile as any).userName}` : ''}! Your strengths are ready to explore.
-                      </h2>
-                      <p className="text-gray-600 text-sm">
-                        Assessment uploaded • {profile.strengths.length} strengths identified
-                        {(profile as any)?.additionalUserInfo?.organization && (
-                          <> • {(profile as any).additionalUserInfo.organization}</>
-                        )}
-                      </p>
-                    </div>
+                    <h1 className="text-xl font-semibold text-slate-900">
+                      {(profile as any)?.userName ? `${(profile as any).userName}'s` : 'Your'} CliftonStrengths Profile
+                    </h1>
+                    <p className="text-sm text-slate-600 mt-1">
+                      {profile.strengths.length} strengths identified
+                      {(profile as any)?.additionalUserInfo?.organization && (
+                        <> • {(profile as any).additionalUserInfo.organization}</>
+                      )}
+                    </p>
                   </div>
-                  <p className="text-gray-700">
-                    Click any strength below to start a focused coaching conversation, or begin with general coaching guidance.
-                  </p>
+                  <div className="mt-4 lg:mt-0">
+                    <button
+                      onClick={onStartCoaching}
+                      className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-2.5 rounded-lg font-medium hover:shadow-md transition-all duration-200 flex items-center group"
+                    >
+                      <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                      </svg>
+                      Start AI Coaching
+                    </button>
+                  </div>
                 </div>
-              )}
-              <h1 className="text-3xl lg:text-4xl font-bold text-gray-800 mb-2">
-                {profile ? 'Your Strengths Dashboard' : 'Welcome to PeakPath'}
-              </h1>
-              <p className="text-gray-600">
+              </div>
+              <div className="px-6 py-3 bg-slate-50">
+                <p className="text-sm text-slate-700">
+                  Select any strength below to begin targeted coaching, or start with general guidance.
+                </p>
+              </div>
+            </div>
+          )}
+          
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between">
+            <div>
+              <h2 className="text-2xl font-bold text-slate-900 mb-1">
+                {profile ? 'Strengths Dashboard' : 'Welcome to PeakPath'}
+              </h2>
+              <p className="text-slate-600">
                 {profile 
-                  ? 'Discover and develop your unique talents with AI-powered coaching'
-                  : 'Unlock your potential with personalized CliftonStrengths coaching'
+                  ? 'Analyze and develop your unique talent profile'
+                  : 'Upload your CliftonStrengths assessment to begin'
                 }
               </p>
             </div>
-            
-            {profile && (
-              <div className="mt-6 lg:mt-0 flex flex-col gap-3">
-                <button
-                  onClick={onStartCoaching}
-                  className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-3 rounded-xl font-semibold hover:shadow-lg transform hover:scale-105 transition-all duration-200 flex items-center justify-center group"
-                >
-                  <svg className="w-5 h-5 mr-2 group-hover:animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                  </svg>
-                  Start AI Coaching
-                </button>
-                <div className="text-center">
-                  <span className="text-xs text-gray-500 bg-gray-100 px-3 py-1 rounded-full">
-                    💡 Or click any strength card below
-                  </span>
-                </div>
-              </div>
-            )}
           </div>
         </div>
 

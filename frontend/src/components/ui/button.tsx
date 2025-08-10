@@ -20,12 +20,16 @@ const buttonVariants = cva(
         ghost:
           "hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50",
         link: "text-primary underline-offset-4 hover:underline",
+        fab: "rounded-full bg-gradient-to-br from-blue-500 to-purple-600 text-white shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200",
+        "fab-secondary": "rounded-full border-2 border-blue-500/30 bg-white/90 backdrop-blur-sm text-blue-600 shadow-lg hover:shadow-xl hover:border-blue-500/50 hover:bg-white transform hover:scale-105 transition-all duration-200",
       },
       size: {
         default: "h-9 px-4 py-2 has-[>svg]:px-3",
         sm: "h-8 rounded-md gap-1.5 px-3 has-[>svg]:px-2.5",
         lg: "h-10 rounded-md px-6 has-[>svg]:px-4",
         icon: "size-9",
+        "fab-lg": "size-14 [&_svg]:size-6",
+        "fab-md": "size-12 [&_svg]:size-5",
       },
     },
     defaultVariants: {
