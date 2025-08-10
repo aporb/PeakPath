@@ -1,6 +1,5 @@
 // Main components
 export { default as StrengthCard, StrengthGrid } from './StrengthCard';
-export { default as FileUpload } from './FileUpload';
 export { default as Dashboard } from './Dashboard';
 export { default as CoachChat, FloatingChat } from './CoachChat';
 

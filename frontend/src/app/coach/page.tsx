@@ -86,6 +86,19 @@ export default function PeakPathApp() {
       });
     }
   }, []);
+
+  // Redirect to landing page if no session data after initial load
+  React.useEffect(() => {
+    // Wait a moment for session loading to complete, then check if we have data
+    const timer = setTimeout(() => {
+      if (!strengthProfile && appState === 'upload') {
+        console.log('No session found, redirecting to landing page');
+        window.location.href = '/';
+      }
+    }, 100);
+
+    return () => clearTimeout(timer);
+  }, [strengthProfile, appState]);
   
   // Chat state
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
@@ -341,25 +354,18 @@ export default function PeakPathApp() {
 
   // Reset App Handler
   const handleReset = useCallback(() => {
-    setAppState('upload');
-    setStrengthProfile(null);
-    setAppError(null);
-    setIsDemoMode(false);
-    setChatMessages([]);
-    setIsChatOpen(false);
-    setIsChatExpanded(false);
-    setCurrentStrengthFocus(undefined);
-    setUploadProgress(0);
-    
     // Clear current session from localStorage
     SessionManager.clearCurrentSession();
     setCurrentSessionId(null);
+    
+    // Redirect to landing page instead of showing upload state
+    window.location.href = '/';
   }, []);
 
   // Error Recovery
   const handleRetry = useCallback(() => {
-    setAppError(null);
-    setAppState('upload');
+    // Redirect to landing page for fresh start
+    window.location.href = '/';
   }, []);
 
   // Session Management Handlers
@@ -444,6 +450,13 @@ export default function PeakPathApp() {
                 </div>
                 
                 <div className="flex items-center gap-2">
+                  <a 
+                    href="/privacy-terms" 
+                    className="text-xs text-slate-500 hover:text-slate-700 transition-colors px-2 py-1 rounded-md hover:bg-slate-100"
+                    title="Privacy & Terms"
+                  >
+                    Privacy
+                  </a>
                   <SessionManagerUI
                     currentSessionId={currentSessionId}
                     onSessionLoad={handleSessionLoad}

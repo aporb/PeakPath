@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { StrengthProfile, Strength, StrengthDomain, DOMAIN_NAMES } from '../types/strength';
 import { StrengthGrid } from './StrengthCard';
 import LoadingSpinner, { LoadingCard } from './LoadingSpinner';
-import FileUpload from './FileUpload';
 
 interface DashboardProps {
   profile?: StrengthProfile;
@@ -39,113 +38,11 @@ export default function Dashboard({
   });
 
   if (!profile && !isLoading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50">
-        <div className="container mx-auto px-4 py-8">
-          <div className="text-center mb-8">
-            <h1 className="text-4xl font-bold text-gray-800 mb-4">
-              Welcome to PeakPath
-            </h1>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Unlock your potential with personalized CliftonStrengths coaching. 
-              Upload your assessment report to get started.
-            </p>
-          </div>
-          
-          <div className="max-w-2xl mx-auto">
-            <FileUpload 
-              onFileUpload={onFileUpload || (async () => {})}
-              className="mb-8"
-            />
-            
-            <div className="grid md:grid-cols-2 gap-6">
-              {/* How it Works */}
-              <div className="bg-white rounded-xl shadow-lg p-8 backdrop-blur-sm bg-opacity-80">
-                <div className="flex items-center mb-6">
-                  <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center mr-3">
-                    <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                    </svg>
-                  </div>
-                  <h3 className="text-xl font-semibold text-gray-800">
-                    How PeakPath Works
-                  </h3>
-                </div>
-                <div className="space-y-4 text-gray-600">
-                  <div className="flex items-start space-x-4">
-                    <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                      <span className="text-sm font-bold text-blue-600">1</span>
-                    </div>
-                    <div>
-                      <p className="font-medium text-gray-800">Upload Your Assessment</p>
-                      <p className="text-sm text-gray-600">Drop your CliftonStrengths PDF above to get started instantly</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start space-x-4">
-                    <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                      <span className="text-sm font-bold text-purple-600">2</span>
-                    </div>
-                    <div>
-                      <p className="font-medium text-gray-800">AI Analysis</p>
-                      <p className="text-sm text-gray-600">Advanced AI analyzes your unique strengths combination</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start space-x-4">
-                    <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                      <span className="text-sm font-bold text-green-600">3</span>
-                    </div>
-                    <div>
-                      <p className="font-medium text-gray-800">Personalized Coaching</p>
-                      <p className="text-sm text-gray-600">Receive tailored insights and development strategies</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* What You'll Get */}
-              <div className="bg-white rounded-xl shadow-lg p-8 backdrop-blur-sm bg-opacity-80">
-                <div className="flex items-center mb-6">
-                  <div className="w-10 h-10 bg-gradient-to-r from-green-500 to-blue-600 rounded-full flex items-center justify-center mr-3">
-                    <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-                    </svg>
-                  </div>
-                  <h3 className="text-xl font-semibold text-gray-800">
-                    What You&apos;ll Discover
-                  </h3>
-                </div>
-                <div className="space-y-3">
-                  <div className="flex items-center space-x-3">
-                    <svg className="w-5 h-5 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                    <p className="text-gray-700">Interactive strengths dashboard with domain insights</p>
-                  </div>
-                  <div className="flex items-center space-x-3">
-                    <svg className="w-5 h-5 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                    <p className="text-gray-700">AI-powered coaching conversations tailored to you</p>
-                  </div>
-                  <div className="flex items-center space-x-3">
-                    <svg className="w-5 h-5 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                    <p className="text-gray-700">Practical strategies for leveraging your strengths</p>
-                  </div>
-                  <div className="flex items-center space-x-3">
-                    <svg className="w-5 h-5 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                    <p className="text-gray-700">Development plans focused on your unique talents</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
+    // Redirect to landing page instead of showing old embedded upload interface
+    if (typeof window !== 'undefined') {
+      window.location.href = '/';
+    }
+    return null;
   }
 
   return (
