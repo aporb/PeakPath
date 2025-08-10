@@ -226,10 +226,10 @@ export function StreamlinedLanding() {
                       </p>
                       <div className="pt-4 border-t border-slate-200">
                         <Button
-                          variant="outline"
+                          variant="secondary"
                           size="sm"
                           onClick={simulateUpload}
-                          className="border-purple-200 text-purple-700 hover:bg-purple-50 hover:text-purple-800 hover:border-purple-300"
+                          className="!bg-purple-50 !text-purple-700 hover:!bg-purple-100 hover:!text-purple-800 !border-purple-200 hover:!border-purple-300 transition-all duration-200"
                         >
                           Try Demo Instead
                         </Button>
@@ -456,8 +456,8 @@ export function StreamlinedLanding() {
               </label>
               <Button
                 size="lg"
-                variant="outline"
-                className="border-purple-200 text-purple-700 hover:bg-purple-50 hover:text-purple-800 hover:border-purple-300 px-6"
+                variant="secondary"
+                className="!bg-purple-50 !text-purple-700 hover:!bg-purple-100 hover:!text-purple-800 !border-purple-200 hover:!border-purple-300 transition-all duration-200 px-6"
                 onClick={simulateUpload}
               >
                 Try Demo First
@@ -474,7 +474,7 @@ export function StreamlinedLanding() {
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-sm text-slate-500">© 2025 Amyn Porbanderwala Dba PeakPath. All rights reserved.</p>
             <div className="flex gap-6 text-sm text-slate-500">
-              <a href="#" className="hover:text-slate-700 transition-colors">
+              <a href="/privacy-terms" className="hover:text-slate-700 transition-colors">
                 Privacy & Terms
               </a>
               <a
