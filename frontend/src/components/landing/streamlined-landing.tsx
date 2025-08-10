@@ -71,7 +71,7 @@ export function StreamlinedLanding() {
       const formData = new FormData()
       formData.append('pdf', file)
       
-      const API_BASE_URL = process.env.NODE_ENV === 'development' ? 'http://localhost:8001' : ''
+      const API_BASE_URL = process.env.NODE_ENV === 'development' ? 'http://localhost:8000' : ''
       
       setTimeout(() => setUploadStep(2), 1000)
       
@@ -229,7 +229,7 @@ export function StreamlinedLanding() {
                           variant="outline"
                           size="sm"
                           onClick={simulateUpload}
-                          className="text-slate-600 hover:text-slate-900"
+                          className="border-purple-200 text-purple-700 hover:bg-purple-50 hover:text-purple-800 hover:border-purple-300"
                         >
                           Try Demo Instead
                         </Button>
@@ -433,15 +433,37 @@ export function StreamlinedLanding() {
               Join professionals who are already using AI to accelerate their strength-based development.
             </p>
 
-            <Button
-              size="lg"
-              className="bg-blue-600 hover:bg-blue-700 text-white px-8"
-              onClick={() => window.location.href = '/coach'}
-            >
-              <Upload className="w-5 h-5 mr-2" />
-              Upload Your Assessment Now
-              <ArrowRight className="w-5 h-5 ml-2" />
-            </Button>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+              <input
+                type="file"
+                accept=".pdf"
+                onChange={handleFileSelect}
+                className="hidden"
+                id="final-cta-upload"
+              />
+              <label htmlFor="final-cta-upload">
+                <Button
+                  size="lg"
+                  className="bg-blue-600 hover:bg-blue-700 text-white px-8 cursor-pointer"
+                  asChild
+                >
+                  <div>
+                    <Upload className="w-5 h-5 mr-2" />
+                    Upload Your Assessment Now
+                    <ArrowRight className="w-5 h-5 ml-2" />
+                  </div>
+                </Button>
+              </label>
+              <Button
+                size="lg"
+                variant="outline"
+                className="border-purple-200 text-purple-700 hover:bg-purple-50 hover:text-purple-800 hover:border-purple-300 px-6"
+                onClick={simulateUpload}
+              >
+                Try Demo First
+                <ArrowRight className="w-5 h-5 ml-2" />
+              </Button>
+            </div>
           </div>
         </div>
       </main>
