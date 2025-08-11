@@ -1,509 +1,393 @@
-# PeakPath - AI-Powered CliftonStrengths Coaching Platform
+# PeakPath 🚀
+### AI-Powered CliftonStrengths Coaching Platform
 
-A modern, full-stack web application that transforms CliftonStrengths assessments into interactive, AI-powered personal coaching experiences. Features a professional landing page, comprehensive session management, and end-to-end demo capabilities.
+Transform your CliftonStrengths assessment into personalized AI coaching conversations. Upload your PDF, get instant insights, and develop your strengths with Claude AI.
 
-![PeakPath Demo](https://img.shields.io/badge/Status-Alpha-orange) ![Next.js](https://img.shields.io/badge/Next.js-15-black) ![TypeScript](https://img.shields.io/badge/TypeScript-5-blue) ![Tailwind](https://img.shields.io/badge/Tailwind-3-cyan)
+[![Live Demo](https://img.shields.io/badge/🌐_Try_Live_Demo-4285f4?style=for-the-badge&logoColor=white)](https://peak-path.vercel.app) [![GitHub Stars](https://img.shields.io/github/stars/aporb/PeakPath?style=for-the-badge&logo=github)](https://github.com/aporb/PeakPath) [![License](https://img.shields.io/badge/License-AGPL_v3-blue.svg?style=for-the-badge)](LICENSE) [![Build Status](https://github.com/aporb/PeakPath/workflows/CI/badge.svg)](https://github.com/aporb/PeakPath/actions) [![Vercel Deployment](https://img.shields.io/github/deployments/aporb/PeakPath/production?label=Vercel&logo=vercel)](https://peak-path.vercel.app) [![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-blue?logo=typescript)](https://www.typescriptlang.org/) [![Next.js](https://img.shields.io/badge/Next.js-15-black?logo=next.js)](https://nextjs.org/)
 
-## ✨ Features
+![PeakPath Landing Page](media/peakpath_home_half.png)
+*PeakPath landing page with a central PDF upload interface.*
 
-### 🚀 Landing Page & User Experience
-- **Professional Landing Page** - Modern design with trust signals and clear CTAs
-- **Dual Upload Modes** - Real PDF processing + interactive demo mode
-- **Seamless User Flow** - Landing → Demo/Upload → Coaching Dashboard
-- **Mobile-First Design** - Responsive across all devices with smooth animations
-- **shadcn/ui Components** - Complete design system with 48+ components
+---
 
-### 💾 Session Management
-- **Local Storage Persistence** - Sessions survive browser restarts
-- **Multi-Session Support** - Save and switch between multiple profiles
-- **Chat History Preservation** - All coaching conversations saved locally
-- **Session Management UI** - Visual session switcher with storage monitoring
-- **Auto Cleanup** - Automatic cleanup of expired sessions (30+ days)
-- **Storage Monitoring** - Real-time usage tracking with cleanup tools
+## 📚 Table of Contents
+- [🎥 Live Demo](#-live-demo)
+- [⚡ Quick Start](#-quick-start)  
+- [✨ Key Features](#-key-features)
+- [🎯 See It In Action](#-see-it-in-action)
+- [📸 Screenshots](#-screenshots)
+- [🏗️ Architecture](#️-architecture)
+- [🚀 Installation](#-installation)
+- [🎮 Usage](#-usage)
+- [🤝 Contributing](#-contributing)
+- [📖 Documentation](#-documentation)
+- [🆘 Support](#-support)
 
-### 🎯 Core Functionality
-- **PDF Upload & Parsing** - Drag-and-drop CliftonStrengths PDFs (Top 5, Top 10, Full 34)
-- **AI-Powered Analysis** - Claude-based coaching insights and recommendations
-- **Interactive Dashboard** - Visual strength exploration with domain color-coding
-- **Personal Coach Chat** - Real-time AI coaching conversations with context
-- **Growth Planning** - Personalized development roadmaps
-- **Strength Focus Mode** - Deep-dive coaching on specific strengths
+---
 
-### 🎭 Demo Mode
-- **Complete Demo Profile** - Realistic CliftonStrengths data (Strategic, Achiever, Learner, Focus, Responsibility)
-- **End-to-End Experience** - Full coaching functionality with demo data
-- **Visual Indicators** - Clear demo mode indicators with easy exit
-- **No Data Required** - Experience the platform without uploading PDFs
+## 🎥 Live Demo
 
-### 🎨 Design & UX
-- **Gallup Color Scheme** - Official domain colors (Purple, Orange, Blue, Green)
-- **Modern shadcn/ui Design** - Professional components with Radix UI primitives
-- **Smooth Animations** - Loading states, transitions, and interactive feedback
-- **Trust Signals** - Security indicators, Claude AI branding, GitHub integration
-- **Accessibility** - Full keyboard navigation and screen reader support
+**Experience PeakPath instantly - no installation required!**
 
-## 🏗️ Architecture
+### 🌐 Try It Now
+[![Open Live Demo](https://img.shields.io/badge/Open_Live_Demo-4285f4?style=for-the-badge&logo=vercel&logoColor=white)](https://peak-path.vercel.app)
 
-```
-peakpath/
-├── frontend/                    # Next.js 15 Full-Stack Application
-│   ├── src/
-│   │   ├── app/
-│   │   │   ├── page.tsx        # Landing Page (Root Route)
-│   │   │   ├── coach/          # Coaching Application
-│   │   │   │   └── page.tsx    # Main Coaching Dashboard
-│   │   │   └── api/            # API Routes
-│   │   ├── components/
-│   │   │   ├── landing/        # Landing Page Components
-│   │   │   ├── ui/             # shadcn/ui Components (48+)
-│   │   │   └── SessionManager.tsx # Session Management UI
-│   │   └── lib/
-│   │       ├── session-storage.ts # localStorage Utilities
-│   │       └── demo-data.ts       # Demo Profile Data
-│   └── components.json         # shadcn/ui Configuration
-└── docs/                       # Documentation
-```
+### 🎯 Demo Mode
+Don't have a CliftonStrengths PDF? Click **"Try Demo Instead"** to experience the full platform with realistic sample data including Strategic, Achiever, Learner, Focus, and Responsibility strengths.
 
-### Frontend Stack
-- **Next.js 15** - React framework with app router
-- **TypeScript** - Full type safety throughout
-- **Tailwind CSS** - Utility-first styling with design system
-- **shadcn/ui** - Complete component library with Radix UI primitives
-- **Lucide React** - Icon system with 1000+ icons
+---
 
-### Backend Stack (Serverless)
-- **Next.js API Routes** - Serverless functions
-- **TypeScript** - Type-safe server development
-- **Claude API** - AI coaching integration (Sonnet 4)
-- **PDF Processing** - Automated assessment parsing
-- **File Upload** - Secure PDF handling with validation
+## ⚡ Quick Start
 
-### Session Architecture
-- **localStorage** - Client-side session persistence
-- **SessionManager** - Utility class for CRUD operations
-- **Session Metadata** - User tracking, timestamps, cleanup
-- **Chat Persistence** - Conversation history across sessions
+### Option 1: Try Online (30 seconds)
+1. Visit **[peak-path.vercel.app](https://peak-path.vercel.app)**
+2. Click **"Try Demo Instead"** for instant experience
+3. Explore AI coaching with sample strengths data
 
-## 🚀 Quick Start
-
-### Prerequisites
-- **Node.js 18+** and **npm 9+**
-- **Claude API key** from [Anthropic Console](https://console.anthropic.com/)
-
-### 1. Clone and Install
+### Option 2: Local Development (2 minutes)
 ```bash
 git clone https://github.com/aporb/PeakPath.git
 cd PeakPath/frontend
 npm install
-```
-
-### 2. Configure Environment
-```bash
-# Create environment file
 cp .env.example .env.local
-
-# Add your Claude API key to .env.local:
-CLAUDE_API_KEY=your_api_key_here
-CLAUDE_MODEL=claude-3-5-sonnet-20241022
-NODE_ENV=development
-```
-
-### 3. Start Development Server
-```bash
+# Add your CLAUDE_API_KEY to .env.local
 npm run dev
 ```
 
-### 4. Experience the Platform
-1. **Landing Page**: Navigate to `http://localhost:8000`
-2. **Demo Mode**: Click "Try Demo Instead" for instant experience
-3. **Real Upload**: Upload a CliftonStrengths PDF for personalized coaching
-4. **Session Management**: Use the "Sessions" button to manage saved profiles
-
-## 🎮 User Flows
-
-### Landing Page Flow
-```
-Landing Page (/) 
-    ├── Try Demo → Demo Animation → Coaching Dashboard (/coach)
-    └── Upload PDF → Processing → Coaching Dashboard (/coach)
-```
-
-### Session Management Flow
-```
-Any Session → Sessions Button → Session Manager UI
-    ├── Switch Sessions → Load Different Profile
-    ├── Delete Sessions → Remove Saved Data
-    └── Storage Cleanup → Clean Expired Sessions
-```
-
-### Coaching Flow
-```
-Dashboard → Strength Cards → Focus Chat → AI Coaching
-    ├── General Chat → Open Conversation
-    ├── Strength Focus → Contextual Coaching
-    └── Session Persistence → Auto-Save Progress
-```
-
-## 📁 Project Structure
-
-### Frontend (`/frontend`)
-```
-src/
-├── app/
-│   ├── layout.tsx              # Root layout with metadata
-│   ├── page.tsx                # Landing page (root route)
-│   ├── coach/
-│   │   └── page.tsx           # Main coaching application
-│   ├── globals.css             # Global styles + shadcn variables
-│   └── api/                    # API routes
-│       ├── health/route.ts     # Health check
-│       ├── upload/route.ts     # PDF upload & parsing
-│       └── coach/
-│           ├── route.ts        # AI coaching endpoint
-│           └── stream/route.ts # Streaming responses
-├── components/
-│   ├── landing/               # Landing page components
-│   │   ├── streamlined-landing.tsx # Main landing component
-│   │   ├── hero.tsx          # Hero section
-│   │   ├── features.tsx      # Features grid
-│   │   ├── cta.tsx          # Call-to-action sections
-│   │   └── index.ts         # Barrel exports
-│   ├── ui/                   # shadcn/ui components (48+)
-│   │   ├── button.tsx       # Button component
-│   │   ├── card.tsx         # Card component
-│   │   ├── dialog.tsx       # Dialog/modal component
-│   │   └── ...              # All shadcn/ui components
-│   ├── SessionManager.tsx    # Session management UI
-│   ├── Dashboard.tsx         # Main dashboard component
-│   ├── CoachChat.tsx        # AI chat interface
-│   └── index.ts             # Component exports
-├── lib/
-│   ├── session-storage.ts    # localStorage utility class
-│   ├── demo-data.ts         # Demo profile data
-│   ├── utils.ts             # Utility functions
-│   └── services/            # Business logic
-└── types/
-    └── strength.ts          # TypeScript interfaces
-```
-
-## 🎮 API Endpoints
-
-### File Processing
-```bash
-POST /api/upload
-# Upload and parse CliftonStrengths PDF
-# Body: FormData with PDF file
-# Returns: Parsed strength profile with full data
-
-GET /api/health  
-# Health check endpoint
-# Returns: Service status and API connectivity
-```
-
-### AI Coaching
-```bash
-POST /api/coach
-# Interactive coaching conversations
-# Body: { message, strengthContext, profileId, conversationHistory }
-# Returns: Personalized coaching response
-
-POST /api/coach/stream
-# Streaming coaching responses
-# Body: Same as /api/coach
-# Returns: Server-sent events with real-time streaming
-```
-
-## 🤖 AI Coaching Features
-
-### Coaching Modes
-- **Summary** - Comprehensive profile overview
-- **Deep Dive** - Strength-specific analysis  
-- **Growth Planning** - Development roadmaps
-- **General Chat** - Open-ended coaching conversations
-- **Contextual Coaching** - Strength-focused guidance
-
-### AI Capabilities
-- **Strength Synergy Analysis** - How strengths work together
-- **Blind Spot Identification** - Potential overuse patterns
-- **Development Strategies** - Actionable growth plans
-- **Leadership Insights** - Domain-based leadership styles
-- **Real-world Applications** - Practical strength usage
-- **Conversation Memory** - Context-aware responses
-
-## 💾 Session Management
-
-### Local Storage Features
-```typescript
-// Session Data Structure
-interface UserSession {
-  profile: StrengthProfile;
-  isDemoMode: boolean;
-  createdAt: string;
-  lastAccessedAt: string;
-  sessionId: string;
-}
-
-interface ChatSession {
-  messages: ChatMessage[];
-  sessionId: string;
-  lastUpdatedAt: string;
-}
-```
-
-### Session Operations
-- **Auto-Save** - Sessions created on upload or demo start
-- **Auto-Restore** - Last session loaded on app open
-- **Multi-Session** - Store multiple profiles simultaneously
-- **Session Switching** - Load any previous session instantly
-- **Chat Persistence** - All conversations preserved
-- **Auto-Cleanup** - Remove sessions older than 30 days
-- **Storage Monitoring** - Visual usage indicators with cleanup tools
-
-### Privacy & Storage
-- **Client-Side Only** - All data stays in user's browser
-- **No Server Storage** - Sessions not transmitted or stored on servers
-- **Session Isolation** - Each profile maintained separately
-- **Secure Cleanup** - Complete data removal when deleted
-
-## 🎭 Demo Mode
-
-### Demo Profile Features
-- **Realistic Data** - Complete CliftonStrengths profile with:
-  - Top 5: Strategic, Achiever, Learner, Focus, Responsibility
-  - Full 10: Including Analytical, Discipline, Competition, Self-Assurance, Individualization
-  - Domain Distribution: 3 Strategic Thinking, 4 Executing, 2 Influencing, 1 Relationship Building
-- **Full Functionality** - All coaching features work with demo data
-- **Visual Indicators** - Clear purple badges and banners show demo mode
-- **Easy Exit** - One-click return to upload mode
-
-### Demo User Flow
-```
-Landing Page → "Try Demo Instead" → 3-Step Animation → Coach Dashboard
-    └── Demo Session with Full Coaching Experience
-```
-
-## 🎨 Design System
-
-### Color Scheme (Gallup Official + shadcn/ui)
-- **Executing Domain** - Purple (`purple-500`, `purple-100`)
-- **Influencing Domain** - Orange (`orange-500`, `orange-100`) 
-- **Relationship Building** - Blue (`blue-500`, `blue-100`)
-- **Strategic Thinking** - Green (`green-500`, `green-100`)
-- **UI Neutrals** - shadcn/ui color system with CSS variables
-
-### Component Library
-- **shadcn/ui** - 48+ production-ready components
-- **Radix UI Primitives** - Accessible, unstyled components
-- **Lucide React** - Consistent icon system
-- **Custom Components** - PeakPath-specific UI elements
-
-### Responsive Design
-- **Mobile First** - Progressive enhancement from 320px
-- **Breakpoints** - Tailwind's responsive system
-- **Touch Optimized** - 44px+ touch targets
-- **Animation** - Smooth transitions with reduced motion support
-
-## 🧪 Testing & Demo Data
-
-### Demo Experience
-- **No Registration Required** - Instant access to full platform
-- **Realistic Profile** - Comprehensive CliftonStrengths data
-- **Full Functionality** - Complete coaching experience
-- **Session Persistence** - Demo sessions saved locally
-
-### Sample Data Structure
-```typescript
-// Demo Profile includes:
-- User: "Demo User"
-- Assessment Date: Current
-- 10 Complete Strengths with descriptions
-- Domain categorization
-- Full PDF content simulation
-```
-
-## 📱 Mobile Experience
-
-### Responsive Features
-- **Mobile-First Design** - Optimized for 320px+ screens
-- **Touch Navigation** - Swipe gestures and touch interactions
-- **Adaptive Layout** - Stacked cards on mobile, grid on desktop
-- **Full-Screen Chat** - Dedicated mobile chat experience
-- **Progressive Enhancement** - Desktop features layered on mobile base
-
-### Performance
-- **Code Splitting** - Route-based lazy loading
-- **Image Optimization** - Next.js automatic optimization
-- **Caching** - Strategic caching for repeat visits
-- **Bundle Analysis** - Optimized JavaScript bundles
-
-## 🔧 Development
-
-### Available Scripts
-```bash
-npm run dev           # Start development server (localhost:8000)
-npm run build         # Build for production
-npm run start         # Start production server  
-npm run lint          # Run ESLint
-npm run type-check    # TypeScript checking
-```
-
-### Dependencies Overview
-```json
-{
-  "core": ["next", "react", "typescript"],
-  "ui": ["@radix-ui/*", "tailwindcss", "lucide-react"],
-  "utils": ["clsx", "tailwind-merge", "class-variance-authority"],
-  "forms": ["react-hook-form", "@hookform/resolvers", "zod"],
-  "ai": ["@anthropic-ai/sdk"],
-  "processing": ["pdf-parse", "multer"]
-}
-```
-
-### Environment Variables
-```bash
-# Required
-CLAUDE_API_KEY=your_anthropic_api_key
-
-# Optional (with defaults)
-CLAUDE_MODEL=claude-3-5-sonnet-20241022
-CLAUDE_MAX_TOKENS=4096
-CLAUDE_TEMPERATURE=0.7
-NODE_ENV=development
-```
-
-## 🚀 Production Deployment
-
-### Build Process
-```bash
-# Install dependencies
-npm install
-
-# Build application
-npm run build
-
-# Start production server
-npm start
-```
-
-### Deployment Checklist
-- [ ] Set `NODE_ENV=production`
-- [ ] Configure Claude API key
-- [ ] Enable HTTPS
-- [ ] Set up reverse proxy (nginx/Apache)
-- [ ] Configure CORS for production domain
-- [ ] Enable compression (gzip/brotli)
-- [ ] Set up monitoring and logging
-
-### Vercel Deployment (Recommended)
-```bash
-# Deploy with Vercel CLI
-npx vercel --prod
-
-# Environment variables in Vercel Dashboard:
-# - CLAUDE_API_KEY
-# - CLAUDE_MODEL (optional)
-```
-
-## 🔐 Security Features
-
-### Data Protection
-- **Client-Side Sessions** - No sensitive data sent to servers
-- **File Upload Validation** - PDF format and size limits (10MB)
-- **Input Sanitization** - XSS and injection protection
-- **API Rate Limiting** - Configurable request limits
-- **CORS Protection** - Environment-specific CORS policies
-
-### Privacy Features
-- **Local Storage Only** - Session data never leaves browser
-- **No User Tracking** - No analytics or tracking scripts
-- **Data Cleanup** - Automatic session expiry and cleanup
-- **Secure Processing** - PDFs processed and discarded
-
-## 🤝 Contributing
-
-### Development Workflow
-1. **Fork Repository** - Create your own fork
-2. **Create Branch** - `git checkout -b feature/amazing-feature`
-3. **Make Changes** - Follow TypeScript and ESLint rules
-4. **Test Thoroughly** - Verify all functionality
-5. **Update Documentation** - Update relevant .md files
-6. **Commit Changes** - `git commit -m 'feat: add amazing feature'`
-7. **Push Branch** - `git push origin feature/amazing-feature`
-8. **Create PR** - Open pull request with detailed description
-
-### Code Standards
-- **TypeScript** - Full type safety required
-- **ESLint** - Follow configured rules
-- **Prettier** - Code formatting consistency
-- **Component Structure** - Follow shadcn/ui patterns
-- **Documentation** - Update docs for new features
-
-## 📄 License
-
-This project is private and proprietary.
-
-## 🆘 Troubleshooting
-
-### Common Issues
-
-**Application won't start:**
-```bash
-# Clear Next.js cache
-rm -rf .next node_modules
-npm install
-npm run dev
-```
-
-**Session data not persisting:**
-- Check if localStorage is available in browser
-- Verify no browser extensions blocking storage
-- Check browser storage limits (5MB typical)
-
-**Demo mode not loading:**
-- Clear browser cache and localStorage
-- Check console for JavaScript errors
-- Verify demo-data.ts is properly imported
-
-**PDF upload failing:**
-- Verify file is actual CliftonStrengths PDF
-- Check file size (10MB limit)
-- Ensure PDF contains readable text (not just images)
-
-**Claude API errors:**
-- Verify API key in environment variables
-- Check API key permissions and quotas
-- Monitor rate limiting in console logs
-- Ensure model name matches available models
-
-**Landing page components not rendering:**
-- Verify shadcn/ui components installed
-- Check components.json configuration
-- Ensure Tailwind CSS configured properly
-- Verify all Radix UI dependencies installed
-
-**Session management UI issues:**
-- Check localStorage permissions
-- Verify SessionManager class imported correctly
-- Clear corrupted localStorage data manually
-- Check browser developer tools for errors
-
-### Performance Issues
-- **Slow initial load** - Check bundle size and code splitting
-- **Chat lag** - Verify streaming endpoint functionality  
-- **Mobile performance** - Check image optimization and bundle size
-
-### Storage Issues
-- **Storage full** - Use session cleanup tools in Session Manager
-- **Corrupted sessions** - Clear localStorage manually
-- **Missing sessions** - Check browser storage permissions
-
-### Support
-For issues and feature requests, create an issue in the project repository with:
-- Detailed description of the problem
-- Steps to reproduce
-- Browser and OS information
-- Console error messages (if any)
+Visit `http://localhost:8000` - Ready to coach! 🎉
 
 ---
 
-Built with ❤️ using Next.js 15, TypeScript, shadcn/ui & Claude AI - Production ready for Vercel deployment!
+## ✨ Key Features
+
+<table>
+  <tr>
+    <td align="center">
+      <img width="60" src="media/icons/artificial-intelligence.svg" alt="AI"/>
+      <br><strong>AI-Powered Coaching</strong>
+      <br>Claude AI provides personalized insights and development strategies
+    </td>
+    <td align="center">
+      <img width="60" src="media/icons/pdf.svg" alt="PDF"/>
+      <br><strong>Smart PDF Parsing</strong>
+      <br>Upload any CliftonStrengths PDF (Top 5, 10, or Full 34)
+    </td>
+    <td align="center">
+      <img width="60" src="media/icons/chat.svg" alt="Chat"/>
+      <br><strong>Interactive Chat</strong>
+      <br>Real-time coaching conversations with context awareness
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <img width="60" src="media/icons/save.svg" alt="Save"/>
+      <br><strong>Session Management</strong>
+      <br>Local storage with multi-profile support and chat history
+    </td>
+    <td align="center">
+      <img width="60" src="media/icons/demo.svg" alt="Demo"/>
+      <br><strong>Demo Mode</strong>
+      <br>Full experience with realistic sample data - no PDF required
+    </td>
+    <td align="center">
+      <img width="60" src="media/icons/responsive.svg" alt="Mobile"/>
+      <br><strong>Mobile-First</strong>
+      <br>Responsive design optimized for all devices
+    </td>
+  </tr>
+</table>
+
+### 🎯 What Makes PeakPath Special
+
+- **🧠 Contextual AI Coaching**: Unlike generic chatbots, understands your specific strengths profile
+- **🔒 Privacy-First**: All data stays in your browser - no server storage of personal information  
+- **🎨 Professional UI**: Built with shadcn/ui and Tailwind CSS for a polished experience
+- **⚡ Instant Demo**: Try the full platform without uploading personal documents
+- **🔄 Session Persistence**: Resume coaching conversations across browser sessions
+
+## 🎯 See It In Action
+
+Transform your CliftonStrengths assessment into personalized AI coaching in three simple steps:
+
+![How PeakPath Works](media/how-it-works-flow.svg)
+
+<div align="center">
+
+### Step 1: Upload Your PDF
+![PeakPath Landing Page](media/peakpath_home_upload.png)
+*Upload any CliftonStrengths PDF (Top 5, 10, or Full 34) or try our demo mode with realistic sample data.*
+
+---
+
+### Step 2: Explore Your Dashboard  
+![PeakPath Dashboard](media/peakpath_demodashboard.png)
+*Discover your personalized strengths dashboard with domain breakdowns, detailed strength cards, and AI-powered insights tailored to your unique profile.*
+
+---
+
+### Step 3: Start AI Coaching
+💬 **Interactive Conversations** - Engage with Claude AI for personalized development strategies, strength-building exercises, and career guidance based on your specific CliftonStrengths profile.
+
+</div>
+
+**Ready to experience it yourself?** [![Try Live Demo](https://img.shields.io/badge/🌐_Try_Live_Demo-4285f4?style=for-the-badge&logoColor=white)](https://peak-path.vercel.app)
+
+---
+
+## 🏗️ Architecture
+
+![PeakPath Architecture](media/architecture-diagram.svg)
+
+### Project Structure
+```
+PeakPath/
+├── 📁 frontend/              # Next.js 15 Full-Stack App
+│   ├── 📁 src/app/          # App Router (pages & API routes)
+│   ├── 📁 components/       # React components + shadcn/ui
+│   └── 📁 lib/              # Utilities & services
+└── 📁 docs/                 # Documentation
+```
+
+### Tech Stack
+- **Frontend**: Next.js 15, React 18, TypeScript
+- **UI**: shadcn/ui, Tailwind CSS, Radix UI
+- **AI**: Claude API (Anthropic)
+- **Storage**: Browser localStorage (privacy-first)
+- **Deployment**: Vercel (with serverless functions)
+
+---
+
+## 🚀 Installation
+
+### Prerequisites
+- Node.js 18+ and npm 9+
+- Claude API key from [Anthropic Console](https://console.anthropic.com/)
+
+### Development Setup
+
+1. **Clone Repository**
+```bash
+git clone https://github.com/aporb/PeakPath.git
+cd PeakPath
+```
+
+2. **Install Dependencies**
+```bash
+cd frontend
+npm install
+```
+
+3. **Environment Configuration**
+```bash
+cp .env.example .env.local
+
+# Add to .env.local:
+CLAUDE_API_KEY=your_anthropic_api_key_here
+CLAUDE_MODEL=claude-4-sonnet
+NODE_ENV=development
+```
+
+4. **Start Development Server**
+```bash
+npm run dev
+```
+Application runs at `http://localhost:8000`
+
+### Production Deployment
+
+**Deploy to Vercel (Recommended):**
+```bash
+npm install -g vercel
+vercel --prod
+```
+
+Set environment variables in Vercel dashboard:
+- `CLAUDE_API_KEY`: Your Anthropic API key
+
+---
+
+## 🎮 Usage
+
+### For Individuals
+1. **Upload your CliftonStrengths PDF** or try demo mode
+2. **Explore your strengths** through the interactive dashboard
+3. **Start coaching conversations** for personalized development insights
+4. **Save sessions** for continued growth over time
+
+### For Coaches & Organizations
+- **Multi-client support** through session management
+- **Contextual coaching** based on individual strength profiles  
+- **Development planning** with AI-generated recommendations
+- **Progress tracking** through conversation history
+
+### API Usage
+```typescript
+// Upload CliftonStrengths PDF
+const formData = new FormData();
+formData.append('pdf', file);
+const profile = await fetch('/api/upload', {
+  method: 'POST',
+  body: formData
+}).then(res => res.json());
+
+// Get AI coaching response
+const coaching = await fetch('/api/coach', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    message: "How can I develop my Strategic strength?",
+    strengthContext: "Strategic",
+    profileId: profile.id
+  })
+}).then(res => res.json());
+```
+
+---
+
+## 🤝 Contributing
+
+We welcome contributions! Here's how to get started:
+
+### Quick Contributing Guide
+
+1. **Fork the repository**
+2. **Create your feature branch**: `git checkout -b feature/amazing-feature`
+3. **Make your changes** following our code standards
+4. **Test thoroughly** with `npm run build` and `npm run lint`
+5. **Commit your changes**: `git commit -m 'Add amazing feature'`
+6. **Push to the branch**: `git push origin feature/amazing-feature`
+7. **Open a Pull Request**
+
+### Development Standards
+- **TypeScript**: Full type safety required
+- **ESLint/Prettier**: Follow configured code style
+- **Testing**: Ensure components render correctly
+- **Documentation**: Update relevant docs for new features
+
+### Areas We Need Help With
+- 🎨 **Visual Design**: UI/UX improvements and additional visual assets
+- 🧪 **Testing**: Unit and integration tests
+- 📝 **Documentation**: Tutorials and guides
+- 🌐 **Internationalization**: Multi-language support
+- ♿ **Accessibility**: WCAG 2.2 AA compliance
+
+---
+
+## 📖 Documentation
+
+### Core Documentation
+- **[Architecture Guide](docs/development/ARCHITECTURE.md)** - Technical architecture and design decisions
+- **[API Reference](docs/development/API.md)** - Complete API documentation (Coming Soon)
+- **[Deployment Guide](docs/deployment/)** - Production deployment instructions  
+- **[Contributing Guide](docs/CONTRIBUTING.md)** - Development workflow and standards
+
+### User Guides
+- **[Getting Started](docs/user/getting-started.md)** - Step-by-step user onboarding (Coming Soon)
+- **[Demo Mode Guide](docs/user/demo-mode.md)** - Understanding demo features (Coming Soon)
+- **[Session Management](docs/user/session-management.md)** - Managing multiple profiles (Coming Soon)
+
+### Development
+- **[Frontend README](frontend/README.md)** - Frontend-specific documentation
+- **[Component Library](docs/development/components.md)** - shadcn/ui component usage (Coming Soon)
+- **[Development Setup](docs/development/development.md)** - Local development guide (Coming Soon)
+
+---
+
+## 🆘 Support
+
+### Getting Help
+- 🐛 **Bug Reports**: [Create an issue](https://github.com/aporb/PeakPath/issues/new?template=bug_report.md)
+- 💡 **Feature Requests**: [Request a feature](https://github.com/aporb/PeakPath/issues/new?template=feature_request.md)
+- 💬 **Discussions**: [GitHub Discussions](https://github.com/aporb/PeakPath/discussions)
+- 📧 **Direct Contact**: [Open an issue](https://github.com/aporb/PeakPath/issues) for project-related questions
+
+### Troubleshooting Common Issues
+
+<details>
+<summary><strong>Application won't start locally</strong></summary>
+
+```bash
+# Clear cache and reinstall
+rm -rf .next node_modules package-lock.json
+npm install
+npm run dev
+```
+</details>
+
+<details>
+<summary><strong>PDF upload failing</strong></summary>
+
+- Ensure file is a valid CliftonStrengths PDF
+- Check file size (10MB limit)
+- Verify PDF contains readable text (not just images)
+</details>
+
+<details>
+<summary><strong>Claude API errors</strong></summary>
+
+- Verify `CLAUDE_API_KEY` in environment variables
+- Check API key permissions and quotas at console.anthropic.com
+- Monitor rate limiting in browser console
+</details>
+
+### Performance & Browser Support
+- **Browsers**: Chrome 88+, Firefox 84+, Safari 14+, Edge 88+
+- **Mobile**: iOS Safari 14+, Chrome Android 88+
+- **Performance**: Lighthouse score 95+ (Performance, Accessibility, Best Practices)
+
+---
+
+## 📊 Project Status
+
+### Current Version: 1.0.0
+- ✅ **Core Features**: PDF parsing, AI coaching, session management
+- ✅ **Demo Mode**: Complete sample experience
+- ✅ **Mobile Responsive**: Optimized for all devices
+- ✅ **Production Ready**: Deployed and stable
+
+### Roadmap
+- 🔜 **Team Analytics**: Multi-profile team insights
+- 🔜 **Export Features**: PDF reports and development plans
+- 🔜 **API Integrations**: Connect with other coaching tools
+- 🔜 **Offline Mode**: PWA capabilities for offline coaching
+
+---
+
+## 📄 License
+
+This project is licensed under the **GNU Affero General Public License v3.0** - see the [LICENSE](LICENSE) file for details.
+
+**Why AGPL?** This ensures that any improvements or modifications to PeakPath, including hosted versions, remain open source and benefit the entire community.
+
+---
+
+## 🌟 Show Your Support
+
+If PeakPath helps you develop your strengths, please consider:
+- ⭐ **Star this repository** on GitHub
+- 🐦 **Share it** with your network
+- 🐛 **Report issues** or suggest improvements
+- 🤝 **Contribute** to make it even better
+
+---
+
+## 🙏 Acknowledgments
+
+- **Anthropic** for the incredible Claude AI that powers our coaching
+- **Gallup** for the CliftonStrengths framework and assessment
+- **shadcn/ui** for the beautiful, accessible component library
+- **Vercel** for seamless deployment and hosting
+- **Open Source Community** for the tools and libraries that make this possible
+
+---
+
+<div align="center">
+
+**Built with ❤️ using Next.js, TypeScript, and shadcn/ui**  
+**Deployed on Vercel**
+
+[![Live Demo](https://img.shields.io/badge/🌐_Experience_PeakPath_Now-4285f4?style=for-the-badge)](https://peak-path.vercel.app)
+
+*Transform your strengths into your competitive advantage*
+
+</div>
