@@ -254,3 +254,8 @@ coverage/
 
 
 peakpath-landing/
+
+# Security Documentation
+docs/security-audit-report.md
+security-audit-*.md
+*.security-audit.md
