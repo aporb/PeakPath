@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="800" height="300" viewBox="0 0 800 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="step1Gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#EF4444;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#DC2626;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="step2Gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3B82F6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1D4ED8;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="step3Gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#10B981;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#059669;stop-opacity:1" />
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="2" dy="4" stdDeviation="4" flood-opacity="0.1"/>
+    </filter>
+  </defs>
+  
+  <!-- Step 1: Upload PDF -->
+  <g transform="translate(50, 50)">
+    <rect x="0" y="0" width="200" height="120" rx="12" fill="url(#step1Gradient)" filter="url(#shadow)"/>
+    <rect x="8" y="8" width="184" height="104" rx="8" fill="white" opacity="0.95"/>
+    
+    <!-- PDF Icon -->
+    <rect x="40" y="30" width="30" height="40" rx="2" fill="url(#step1Gradient)" opacity="0.8"/>
+    <path d="M70 30V40H80L70 30Z" fill="#DC2626" opacity="0.6"/>
+    
+    <!-- Upload arrow -->
+    <path d="M85 45L95 35L105 45M95 35V70" stroke="url(#step1Gradient)" stroke-width="3" fill="none"/>
+    
+    <!-- Step number -->
+    <circle cx="30" cy="30" r="12" fill="white"/>
+    <text x="30" y="35" text-anchor="middle" fill="url(#step1Gradient)" font-family="Arial, sans-serif" font-size="14" font-weight="bold">1</text>
+    
+    <!-- Step title -->
+    <text x="100" y="85" text-anchor="middle" fill="#1F2937" font-family="Arial, sans-serif" font-size="16" font-weight="bold">Upload PDF</text>
+    <text x="100" y="102" text-anchor="middle" fill="#6B7280" font-family="Arial, sans-serif" font-size="12">CliftonStrengths Report</text>
+  </g>
+  
+  <!-- Arrow 1 to 2 -->
+  <g transform="translate(275, 105)">
+    <path d="M0 5L20 5M15 0L20 5L15 10" stroke="#9CA3AF" stroke-width="2" fill="none"/>
+    <text x="10" y="-5" text-anchor="middle" fill="#6B7280" font-family="Arial, sans-serif" font-size="10">AI Parse</text>
+  </g>
+  
+  <!-- Step 2: AI Analysis -->
+  <g transform="translate(300, 50)">
+    <rect x="0" y="0" width="200" height="120" rx="12" fill="url(#step2Gradient)" filter="url(#shadow)"/>
+    <rect x="8" y="8" width="184" height="104" rx="8" fill="white" opacity="0.95"/>
+    
+    <!-- Brain/AI Icon -->
+    <circle cx="60" cy="50" r="18" fill="url(#step2Gradient)" opacity="0.2"/>
+    <g stroke="url(#step2Gradient)" stroke-width="2" fill="none">
+      <path d="M50 45H70M50 50H70M50 55H70"/>
+      <circle cx="45" cy="45" r="2" fill="url(#step2Gradient)"/>
+      <circle cx="75" cy="45" r="2" fill="url(#step2Gradient)"/>
+      <circle cx="45" cy="55" r="2" fill="url(#step2Gradient)"/>
+      <circle cx="75" cy="55" r="2" fill="url(#step2Gradient)"/>
+    </g>
+    
+    <!-- Processing indicator -->
+    <g transform="translate(110, 40)">
+      <circle cx="0" cy="0" r="3" fill="url(#step2Gradient)" opacity="0.8">
+        <animate attributeName="opacity" values="0.3;1;0.3" dur="1.5s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="0" cy="10" r="3" fill="url(#step2Gradient)" opacity="0.6">
+        <animate attributeName="opacity" values="0.3;1;0.3" dur="1.5s" begin="0.5s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="0" cy="20" r="3" fill="url(#step2Gradient)" opacity="0.4">
+        <animate attributeName="opacity" values="0.3;1;0.3" dur="1.5s" begin="1s" repeatCount="indefinite"/>
+      </circle>
+    </g>
+    
+    <!-- Step number -->
+    <circle cx="30" cy="30" r="12" fill="white"/>
+    <text x="30" y="35" text-anchor="middle" fill="url(#step2Gradient)" font-family="Arial, sans-serif" font-size="14" font-weight="bold">2</text>
+    
+    <!-- Step title -->
+    <text x="100" y="85" text-anchor="middle" fill="#1F2937" font-family="Arial, sans-serif" font-size="16" font-weight="bold">AI Analysis</text>
+    <text x="100" y="102" text-anchor="middle" fill="#6B7280" font-family="Arial, sans-serif" font-size="12">Strengths Extraction</text>
+  </g>
+  
+  <!-- Arrow 2 to 3 -->
+  <g transform="translate(525, 105)">
+    <path d="M0 5L20 5M15 0L20 5L15 10" stroke="#9CA3AF" stroke-width="2" fill="none"/>
+    <text x="10" y="-5" text-anchor="middle" fill="#6B7280" font-family="Arial, sans-serif" font-size="10">Ready</text>
+  </g>
+  
+  <!-- Step 3: AI Coaching -->
+  <g transform="translate(550, 50)">
+    <rect x="0" y="0" width="200" height="120" rx="12" fill="url(#step3Gradient)" filter="url(#shadow)"/>
+    <rect x="8" y="8" width="184" height="104" rx="8" fill="white" opacity="0.95"/>
+    
+    <!-- Chat bubbles -->
+    <ellipse cx="70" cy="45" rx="20" ry="12" fill="url(#step3Gradient)" opacity="0.3"/>
+    <ellipse cx="110" cy="55" rx="15" ry="10" fill="url(#step3Gradient)" opacity="0.5"/>
+    
+    <!-- Chat content dots -->
+    <g fill="white">
+      <circle cx="65" cy="42" r="2"/>
+      <circle cx="70" cy="42" r="2"/>
+      <circle cx="75" cy="42" r="2"/>
+      <circle cx="107" cy="52" r="1.5"/>
+      <circle cx="110" cy="52" r="1.5"/>
+      <circle cx="113" cy="52" r="1.5"/>
+    </g>
+    
+    <!-- Coaching indicator -->
+    <path d="M130 35L140 30L150 35L140 40Z" fill="url(#step3Gradient)" opacity="0.6"/>
+    
+    <!-- Step number -->
+    <circle cx="30" cy="30" r="12" fill="white"/>
+    <text x="30" y="35" text-anchor="middle" fill="url(#step3Gradient)" font-family="Arial, sans-serif" font-size="14" font-weight="bold">3</text>
+    
+    <!-- Step title -->
+    <text x="100" y="85" text-anchor="middle" fill="#1F2937" font-family="Arial, sans-serif" font-size="16" font-weight="bold">AI Coaching</text>
+    <text x="100" y="102" text-anchor="middle" fill="#6B7280" font-family="Arial, sans-serif" font-size="12">Personalized Guidance</text>
+  </g>
+  
+  <!-- Main title -->
+  <text x="400" y="25" text-anchor="middle" fill="#1F2937" font-family="Arial, sans-serif" font-size="24" font-weight="bold">How PeakPath Works</text>
+  
+  <!-- Subtitle -->
+  <text x="400" y="280" text-anchor="middle" fill="#6B7280" font-family="Arial, sans-serif" font-size="14">Transform your CliftonStrengths assessment into personalized AI coaching in three simple steps</text>
+</svg>

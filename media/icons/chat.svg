@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="96" height="96" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="chatGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#10B981;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#059669;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="bubbleGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3B82F6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1D4ED8;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Main chat bubble -->
+  <path d="M16 20C16 15.6 19.6 12 24 12H64C68.4 12 72 15.6 72 20V48C72 52.4 68.4 56 64 56H32L16 72V20Z" fill="url(#chatGradient)"/>
+  
+  <!-- Secondary chat bubble -->
+  <path d="M32 36C32 31.6 35.6 28 40 28H80C84.4 28 88 31.6 88 36V64C88 68.4 84.4 72 80 72H48L32 88V36Z" fill="url(#bubbleGradient)" opacity="0.8"/>
+  
+  <!-- Chat dots in main bubble -->
+  <circle cx="36" cy="32" r="3" fill="white" opacity="0.9"/>
+  <circle cx="48" cy="32" r="3" fill="white" opacity="0.7"/>
+  <circle cx="60" cy="32" r="3" fill="white" opacity="0.5"/>
+  
+  <!-- Chat dots in secondary bubble -->
+  <circle cx="52" cy="48" r="2.5" fill="white" opacity="0.9"/>
+  <circle cx="62" cy="48" r="2.5" fill="white" opacity="0.7"/>
+  <circle cx="72" cy="48" r="2.5" fill="white" opacity="0.5"/>
+</svg>

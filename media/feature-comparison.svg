@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="800" height="500" viewBox="0 0 800 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="peakpathGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#10B981;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#059669;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="competitorGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#6B7280;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#4B5563;stop-opacity:1" />
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.1"/>
+    </filter>
+  </defs>
+  
+  <!-- Title -->
+  <text x="400" y="30" text-anchor="middle" fill="#1F2937" font-family="Arial, sans-serif" font-size="24" font-weight="bold">Why Choose PeakPath?</text>
+  <text x="400" y="50" text-anchor="middle" fill="#6B7280" font-family="Arial, sans-serif" font-size="14">AI-powered coaching vs traditional approaches</text>
+  
+  <!-- Headers -->
+  <g transform="translate(0, 80)">
+    <!-- Feature column header -->
+    <rect x="50" y="0" width="200" height="40" rx="8" fill="#F8FAFC" stroke="#E2E8F0"/>
+    <text x="150" y="25" text-anchor="middle" fill="#374151" font-family="Arial, sans-serif" font-size="16" font-weight="bold">Features</text>
+    
+    <!-- PeakPath column header -->
+    <rect x="270" y="0" width="200" height="40" rx="8" fill="url(#peakpathGradient)" filter="url(#shadow)"/>
+    <text x="370" y="25" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="16" font-weight="bold">PeakPath</text>
+    
+    <!-- Traditional column header -->
+    <rect x="490" y="0" width="200" height="40" rx="8" fill="url(#competitorGradient)"/>
+    <text x="590" y="25" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="16" font-weight="bold">Traditional Tools</text>
+  </g>
+  
+  <!-- Feature rows -->
+  <g transform="translate(0, 140)">
+    <!-- Row 1: PDF Processing -->
+    <g transform="translate(0, 0)">
+      <rect x="50" y="0" width="640" height="35" rx="4" fill="white" stroke="#E5E7EB" opacity="0.5"/>
+      <text x="60" y="22" fill="#374151" font-family="Arial, sans-serif" font-size="14">PDF Processing</text>
+      <text x="280" y="22" fill="#059669" font-family="Arial, sans-serif" font-size="14" font-weight="bold">✓ AI-powered extraction</text>
+      <text x="500" y="22" fill="#6B7280" font-family="Arial, sans-serif" font-size="14">✗ Manual input required</text>
+    </g>
+    
+    <!-- Row 2: AI Coaching -->
+    <g transform="translate(0, 40)">
+      <rect x="50" y="0" width="640" height="35" rx="4" fill="#F9FAFB" stroke="#E5E7EB"/>
+      <text x="60" y="22" fill="#374151" font-family="Arial, sans-serif" font-size="14">AI Coaching</text>
+      <text x="280" y="22" fill="#059669" font-family="Arial, sans-serif" font-size="14" font-weight="bold">✓ Claude AI integration</text>
+      <text x="500" y="22" fill="#6B7280" font-family="Arial, sans-serif" font-size="14">✗ Static content only</text>
+    </g>
+    
+    <!-- Row 3: Privacy -->
+    <g transform="translate(0, 80)">
+      <rect x="50" y="0" width="640" height="35" rx="4" fill="white" stroke="#E5E7EB" opacity="0.5"/>
+      <text x="60" y="22" fill="#374151" font-family="Arial, sans-serif" font-size="14">Privacy</text>
+      <text x="280" y="22" fill="#059669" font-family="Arial, sans-serif" font-size="14" font-weight="bold">✓ Client-side only</text>
+      <text x="500" y="22" fill="#6B7280" font-family="Arial, sans-serif" font-size="14">? Server storage</text>
+    </g>
+    
+    <!-- Row 4: Cost -->
+    <g transform="translate(0, 120)">
+      <rect x="50" y="0" width="640" height="35" rx="4" fill="#F9FAFB" stroke="#E5E7EB"/>
+      <text x="60" y="22" fill="#374151" font-family="Arial, sans-serif" font-size="14">Cost</text>
+      <text x="280" y="22" fill="#059669" font-family="Arial, sans-serif" font-size="14" font-weight="bold">✓ Free & Open Source</text>
+      <text x="500" y="22" fill="#6B7280" font-family="Arial, sans-serif" font-size="14">$ Subscription required</text>
+    </g>
+    
+    <!-- Row 5: Demo Mode -->
+    <g transform="translate(0, 160)">
+      <rect x="50" y="0" width="640" height="35" rx="4" fill="white" stroke="#E5E7EB" opacity="0.5"/>
+      <text x="60" y="22" fill="#374151" font-family="Arial, sans-serif" font-size="14">Demo Mode</text>
+      <text x="280" y="22" fill="#059669" font-family="Arial, sans-serif" font-size="14" font-weight="bold">✓ Instant try without PDF</text>
+      <text x="500" y="22" fill="#6B7280" font-family="Arial, sans-serif" font-size="14">✗ Requires assessment</text>
+    </g>
+    
+    <!-- Row 6: Mobile Support -->
+    <g transform="translate(0, 200)">
+      <rect x="50" y="0" width="640" height="35" rx="4" fill="#F9FAFB" stroke="#E5E7EB"/>
+      <text x="60" y="22" fill="#374151" font-family="Arial, sans-serif" font-size="14">Mobile Support</text>
+      <text x="280" y="22" fill="#059669" font-family="Arial, sans-serif" font-size="14" font-weight="bold">✓ Mobile-first design</text>
+      <text x="500" y="22" fill="#6B7280" font-family="Arial, sans-serif" font-size="14">~ Limited mobile UX</text>
+    </g>
+    
+    <!-- Row 7: Real-time Chat -->
+    <g transform="translate(0, 240)">
+      <rect x="50" y="0" width="640" height="35" rx="4" fill="white" stroke="#E5E7EB" opacity="0.5"/>
+      <text x="60" y="22" fill="#374151" font-family="Arial, sans-serif" font-size="14">Real-time Chat</text>
+      <text x="280" y="22" fill="#059669" font-family="Arial, sans-serif" font-size="14" font-weight="bold">✓ Interactive conversations</text>
+      <text x="500" y="22" fill="#6B7280" font-family="Arial, sans-serif" font-size="14">✗ Report-based only</text>
+    </g>
+  </g>
+  
+  <!-- Call to action -->
+  <g transform="translate(400, 430)">
+    <rect x="-80" y="0" width="160" height="40" rx="20" fill="url(#peakpathGradient)" filter="url(#shadow)"/>
+    <text x="0" y="25" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="14" font-weight="bold">Try PeakPath Now</text>
+  </g>
+  
+  <!-- Decorative elements -->
+  <g opacity="0.1">
+    <circle cx="720" cy="100" r="30" fill="url(#peakpathGradient)"/>
+    <circle cx="80" cy="400" r="20" fill="url(#peakpathGradient)"/>
+  </g>
+</svg>
