@@ -125,7 +125,7 @@
     <rect x="0" y="0" width="380" height="120" rx="12" fill="url(#storageGradient)" opacity="0.1" filter="url(#shadow)"/>
     <rect x="8" y="8" width="364" height="104" rx="8" fill="white"/>
     
-    <text x="190" y="30" text-anchor="middle" fill="url(#storageGradient)" font-family="Arial, sans-serif" font-size="20" font-weight="bold">Storage & Persistence</text>
+    <text x="190" y="30" text-anchor="middle" fill="url(#storageGradient)" font-family="Arial, sans-serif" font-size="20" font-weight="bold">Storage &amp; Persistence</text>
     
     <!-- LocalStorage -->
     <g transform="translate(50, 45)">
@@ -147,7 +147,7 @@
     <rect x="0" y="0" width="800" height="80" rx="12" fill="#6B7280" opacity="0.1" filter="url(#shadow)"/>
     <rect x="8" y="8" width="784" height="64" rx="8" fill="white"/>
     
-    <text x="400" y="30" text-anchor="middle" fill="#374151" font-family="Arial, sans-serif" font-size="20" font-weight="bold">Deployment & Hosting</text>
+    <text x="400" y="30" text-anchor="middle" fill="#374151" font-family="Arial, sans-serif" font-size="20" font-weight="bold">Deployment &amp; Hosting</text>
     
     <!-- Vercel -->
     <g transform="translate(300, 40)">
