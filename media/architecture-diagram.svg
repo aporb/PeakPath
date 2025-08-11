@@ -23,8 +23,8 @@
   </defs>
   
   <!-- Title -->
-  <text x="450" y="30" text-anchor="middle" fill="#1F2937" font-family="Arial, sans-serif" font-size="28" font-weight="bold">PeakPath Architecture</text>
-  <text x="450" y="55" text-anchor="middle" fill="#6B7280" font-family="Arial, sans-serif" font-size="16">Full-Stack AI Coaching Platform</text>
+  <text x="450" y="30" text-anchor="middle" fill="#3B82F6" font-family="Arial, sans-serif" font-size="28" font-weight="bold">PeakPath Architecture</text>
+  <text x="450" y="55" text-anchor="middle" fill="#6366F1" font-family="Arial, sans-serif" font-size="16">Full-Stack AI Coaching Platform</text>
   
   <!-- Frontend Layer -->
   <g transform="translate(50, 80)">
