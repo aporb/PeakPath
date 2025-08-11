@@ -2,7 +2,9 @@
 
 import type React from "react"
 
-import { useState, useRef } from "react"
+import { useState, useRef, useEffect } from "react"
+import { useRouter } from "next/navigation"
+import { SessionManager } from "@/lib/session-storage"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -20,12 +22,21 @@ import {
 } from "lucide-react"
 
 export function StreamlinedLanding() {
+  const router = useRouter()
   const [isDragOver, setIsDragOver] = useState(false)
   const [uploadStep, setUploadStep] = useState(0)
   const [isRealUpload, setIsRealUpload] = useState(false)
   const [uploadError, setUploadError] = useState<string | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
   const finalCTAInputRef = useRef<HTMLInputElement>(null)
+
+  // Check for existing session and redirect to dashboard
+  useEffect(() => {
+    const currentSession = SessionManager.loadSession()
+    if (currentSession) {
+      router.push('/coach')
+    }
+  }, [router])
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault()
@@ -312,12 +323,9 @@ export function StreamlinedLanding() {
                           : 'Demo dashboard and AI coach are ready to explore'
                         }
                       </p>
-                      <div className="grid grid-cols-2 gap-3 max-w-sm mx-auto">
-                        <div className="bg-purple-50 p-3 rounded-lg text-purple-700 text-sm font-medium">
-                          4 Executing
-                        </div>
-                        <div className="bg-orange-50 p-3 rounded-lg text-orange-700 text-sm font-medium">
-                          1 Influencing
+                      <div className="flex justify-center items-center p-4">
+                        <div className="bg-gradient-to-r from-blue-50 to-green-50 p-4 rounded-lg text-slate-700 text-sm font-medium text-center">
+                          View your personalized CliftonStrengths domain breakdown
                         </div>
                       </div>
                     </div>

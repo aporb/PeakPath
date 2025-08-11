@@ -82,9 +82,10 @@ export function FileUploadDemo() {
                 <h3 className="text-lg font-semibold text-slate-900 mb-2">Ready for Coaching!</h3>
                 <p className="text-slate-600 text-sm">Your personalized dashboard is ready</p>
               </div>
-              <div className="grid grid-cols-2 gap-2 text-xs">
-                <div className="bg-purple-50 p-2 rounded text-purple-700">4 Executing Strengths</div>
-                <div className="bg-orange-50 p-2 rounded text-orange-700">1 Influencing Strength</div>
+              <div className="flex justify-center">
+                <div className="bg-gradient-to-r from-blue-50 to-green-50 p-2 rounded text-slate-600 text-xs">
+                  Domain breakdown available
+                </div>
               </div>
             </div>
           )}
