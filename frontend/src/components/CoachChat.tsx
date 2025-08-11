@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { ChatMessage, Strength } from '../types/strength';
 import LoadingSpinner from './LoadingSpinner';
 
@@ -13,6 +13,7 @@ interface CoachChatProps {
   isExpanded?: boolean;
   onToggleExpanded?: () => void;
   initialStrengthFocus?: string; // Add prop for initial strength context
+  isDemoMode?: boolean; // Add demo mode support
 }
 
 export default function CoachChat({ 
@@ -23,7 +24,8 @@ export default function CoachChat({
   relatedStrengths = [],
   isExpanded = false,
   onToggleExpanded,
-  initialStrengthFocus
+  initialStrengthFocus,
+  isDemoMode = false
 }: CoachChatProps) {
   const [inputMessage, setInputMessage] = useState('');
   const [selectedStrength, setSelectedStrength] = useState<string | undefined>();
@@ -71,13 +73,23 @@ export default function CoachChat({
     await onSendMessage(action, selectedStrength);
   };
 
-  const quickActions = [
-    "How can I leverage my top strengths today?",
-    "What are some blind spots I should be aware of?", 
-    "Help me with a career development plan",
-    "How do my strengths complement my team?",
-    "What are some practical development activities?"
-  ];
+  // Dynamic quick actions based on demo mode and strength context
+  const quickActions = React.useMemo(() => {
+    if (isDemoMode) {
+      // Use demo-specific actions from simulator
+      const { ChatSimulator } = require('@/lib/chat-simulator');
+      return ChatSimulator.getDemoQuickActions(selectedStrength);
+    }
+    
+    // Default actions for non-demo mode
+    return [
+      "How can I leverage my top strengths today?",
+      "What are some blind spots I should be aware of?", 
+      "Help me with a career development plan",
+      "How do my strengths complement my team?",
+      "What are some practical development activities?"
+    ];
+  }, [isDemoMode, selectedStrength]);
 
   // Clean and readable message formatting
   const formatCoachMessage = (content: string): string => {
@@ -106,7 +118,14 @@ export default function CoachChat({
             </svg>
           </div>
           <div>
-            <h3 className="font-medium text-gray-800 text-sm">AI Strengths Coach</h3>
+            <div className="flex items-center space-x-2">
+              <h3 className="font-medium text-gray-800 text-sm">AI Strengths Coach</h3>
+              {isDemoMode && (
+                <span className="text-xs bg-purple-100 text-purple-600 px-2 py-0.5 rounded-full font-medium">
+                  Demo
+                </span>
+              )}
+            </div>
             {selectedStrength && (
               <p className="text-xs text-purple-600 font-medium">💪 {selectedStrength}</p>
             )}
@@ -154,11 +173,17 @@ export default function CoachChat({
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
               </svg>
             </div>
-            <h4 className="font-medium text-gray-800 mb-1 text-sm">Start a conversation</h4>
+            <h4 className="font-medium text-gray-800 mb-1 text-sm">
+              {isDemoMode ? 'Try Demo Coaching' : 'Start a conversation'}
+            </h4>
             <p className="text-xs text-gray-600 mb-4 max-w-xs">
-              {selectedStrength 
-                ? `Let's explore your ${selectedStrength} strength together.`
-                : 'Ask me anything about your strengths or development.'
+              {isDemoMode 
+                ? selectedStrength 
+                  ? `Experience AI coaching for your ${selectedStrength} strength using demo mode.`
+                  : 'Experience AI coaching based on a demo CliftonStrengths profile. Try asking about Strategic, Achiever, or any of the top 5 strengths!'
+                : selectedStrength 
+                  ? `Let's explore your ${selectedStrength} strength together.`
+                  : 'Ask me anything about your strengths or development.'
               }
             </p>
           </div>

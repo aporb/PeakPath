@@ -141,6 +141,25 @@ export default function PeakPathApp() {
     strengthContext?: string,
     onChunk?: (chunk: string) => void
   ): Promise<ChatMessage> => {
+    // Use chat simulator in demo mode
+    if (isDemoMode) {
+      const { ChatSimulator } = await import('@/lib/chat-simulator');
+      
+      return await ChatSimulator.simulateResponse(
+        message,
+        chatMessages,
+        {
+          strengthContext,
+          onChunk,
+          typingSpeed: 2,
+          minDelay: 30,
+          maxDelay: 80,
+          initialThinkingTime: 1500
+        }
+      );
+    }
+
+    // Production API logic for non-demo mode
     const requestBody = {
       message,
       strengthContext,
@@ -231,7 +250,7 @@ export default function PeakPathApp() {
       timestamp: new Date(data.coach.timestamp),
       strengthContext,
     };
-  }, [strengthProfile?.id, chatMessages]);
+  }, [isDemoMode, strengthProfile?.id, chatMessages]);
 
   // File Upload Handler
   const handleFileUpload = useCallback(async (file: File) => {
@@ -488,6 +507,7 @@ export default function PeakPathApp() {
                   onToggleExpanded={() => setIsChatExpanded(false)}
                   initialStrengthFocus={currentStrengthFocus}
                   className="h-full"
+                  isDemoMode={isDemoMode}
                 />
               </div>
             )}
