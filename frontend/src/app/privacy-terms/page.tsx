@@ -15,7 +15,7 @@ export default function PrivacyTermsPage() {
         <div className="mx-auto max-w-4xl flex items-center justify-between">
           <div className="flex items-center gap-4">
             <Link href="/">
-              <Button variant="ghost" size="sm" className="gap-2">
+              <Button variant="ghost" size="sm" className="gap-2 text-slate-600">
                 <ArrowLeft className="w-4 h-4" />
                 Back to PeakPath
               </Button>

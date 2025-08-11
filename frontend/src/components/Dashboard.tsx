@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { StrengthProfile, Strength, StrengthDomain, DOMAIN_NAMES } from '../types/strength';
+import { StrengthProfile, Strength, StrengthDomain, DOMAIN_NAMES, DOMAIN_COLORS } from '../types/strength';
 import { StrengthGrid } from './StrengthCard';
 import LoadingSpinner, { LoadingCard } from './LoadingSpinner';
 
@@ -125,12 +125,7 @@ export default function Dashboard({
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
                 {domainStats.map(({ domain, count, topFiveCount }) => {
                   const percentage = profile ? Math.round((topFiveCount / 5) * 100) : 0;
-                  const domainColors = {
-                    [StrengthDomain.EXECUTING]: 'from-red-400 to-red-600',
-                    [StrengthDomain.INFLUENCING]: 'from-orange-400 to-orange-600', 
-                    [StrengthDomain.RELATIONSHIP_BUILDING]: 'from-green-400 to-green-600',
-                    [StrengthDomain.STRATEGIC_THINKING]: 'from-blue-400 to-blue-600'
-                  };
+                  const domainGradient = DOMAIN_COLORS[domain].gradient;
                   
                   return (
                     <div
@@ -139,7 +134,7 @@ export default function Dashboard({
                       onClick={() => setSelectedDomain(domain)}
                     >
                       <div className="text-center">
-                        <div className={`w-12 h-12 bg-gradient-to-r ${domainColors[domain]} rounded-full flex items-center justify-center mx-auto mb-3`}>
+                        <div className={`w-12 h-12 bg-gradient-to-r ${domainGradient} rounded-full flex items-center justify-center mx-auto mb-3`}>
                           <span className="text-white font-bold text-lg">{topFiveCount}</span>
                         </div>
                         <div className="text-sm font-medium text-gray-600 mb-1">
@@ -151,7 +146,7 @@ export default function Dashboard({
                         <div className="mt-2">
                           <div className="w-full bg-gray-200 rounded-full h-2">
                             <div 
-                              className={`bg-gradient-to-r ${domainColors[domain]} h-2 rounded-full transition-all duration-300`}
+                              className={`bg-gradient-to-r ${domainGradient} h-2 rounded-full transition-all duration-300`}
                               style={{ width: `${percentage}%` }}
                             />
                           </div>
@@ -218,12 +213,7 @@ export default function Dashboard({
                       All Domains
                     </button>
                     {domains.map(domain => {
-                      const domainColors = {
-                        [StrengthDomain.EXECUTING]: 'from-red-500 to-red-700',
-                        [StrengthDomain.INFLUENCING]: 'from-orange-500 to-orange-700', 
-                        [StrengthDomain.RELATIONSHIP_BUILDING]: 'from-green-500 to-green-700',
-                        [StrengthDomain.STRATEGIC_THINKING]: 'from-blue-500 to-blue-700'
-                      };
+                      const domainGradient = DOMAIN_COLORS[domain].gradient;
                       
                       return (
                         <button
@@ -231,7 +221,7 @@ export default function Dashboard({
                           onClick={() => setSelectedDomain(domain)}
                           className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
                             selectedDomain === domain
-                              ? `bg-gradient-to-r ${domainColors[domain]} text-white shadow-md`
+                              ? `bg-gradient-to-r ${domainGradient} text-white shadow-md`
                               : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
                           }`}
                         >
