@@ -15,7 +15,6 @@ Transform your CliftonStrengths assessment into personalized AI coaching convers
 - [⚡ Quick Start](#-quick-start)  
 - [✨ Key Features](#-key-features)
 - [🎯 See It In Action](#-see-it-in-action)
-- [📸 Screenshots](#-screenshots)
 - [🏗️ Architecture](#️-architecture)
 - [🚀 Installation](#-installation)
 - [🎮 Usage](#-usage)
